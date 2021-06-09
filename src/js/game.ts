@@ -36,5 +36,16 @@ export default class Game {
 		// Background
 		this.ctx.fillStyle = "black";
 		this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+        let b: number = 0;
+        for (let i = 0; i < 10; i++) {
+            b++;
+            for (let j = 0; j < 10; j++) {
+                b++;
+                this.ctx.fillStyle = b%3 == 0 ? "black" : b%3 == 1 ? "white" : "red";
+                
+		        this.ctx.fillRect((this.canvas.width / 10) * i, (this.canvas.height / 10) * j, this.canvas.width / 10, this.canvas.height / 10);
+            }
+        }
 	}
 }
