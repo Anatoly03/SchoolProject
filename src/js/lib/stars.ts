@@ -9,14 +9,24 @@ export default class Stars {
     }
 
     public update(): void {
-        if (this.stars.length < 10000)
-            this.stars.push({
-                x: Math.random(),
-                y: 0,
-                a: 0,
-                w: Math.random(), // How close is a star? => Width, speed
-            });
+        this.addStar();
+        this.updateStars();
+    }
 
+    private addStar(): void {
+        let x = Math.random();
+
+        this.stars.push({
+            x: x,
+            y: 0,
+            a: 0,
+            w: Math.abs(Math.abs(x - .5) + (Math.random() - .5) * .3),
+            // How close is a star? => Width, speed
+            // Calculation: Further from the centre a star, the higher the width + random
+        });
+    }
+
+    private updateStars(): void {
         let removedStars = 0;
         for (let i = 0; i < this.stars.length; i++) {
             let removeIt = false;
@@ -24,17 +34,19 @@ export default class Stars {
 
             //let xDif = Math.abs(star.x - .5) / 50;
             //let yDif = Math.abs(star.y - .5) / 50;
-            let yDif = .005 + star.w * .05
+            let yDif = .005 + star.w * .05 // star.w * .005
 
             //star.x += star.x > 0.5 ? xDif : -xDif
             //star.y += star.y > 0.5 ? yDif : -yDif
             star.y -= -yDif
 
-            if (star.y < 0) removeIt = true;
-            //if (star.y > 1) removeIt = true;
+            //if (star.y > 0) removeIt = true;
+            if (star.y > 1) removeIt = true;
 
-            if (star.y > .05)
-                star.a += .1;
+            if (star.a < 1)
+                star.a += .1; // .1
+            else if (star.y > .5)
+                star.a -= .1;
 
             if (removeIt) {
                 this.stars.splice(i - removedStars, 1);
