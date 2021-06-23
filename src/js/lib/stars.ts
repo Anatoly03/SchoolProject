@@ -30,15 +30,11 @@ export default class Stars {
             //star.y += star.y > 0.5 ? yDif : -yDif
             star.y -= -yDif
 
-            if (star.x < 0) removeIt = true;
             if (star.y < 0) removeIt = true;
-            if (star.x > 1) removeIt = true;
             //if (star.y > 1) removeIt = true;
 
             if (star.y > .05)
                 star.a += .1;
-            else
-                star.a -= .05;
 
             if (removeIt) {
                 this.stars.splice(i - removedStars, 1);
