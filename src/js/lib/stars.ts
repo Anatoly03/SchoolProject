@@ -6,19 +6,23 @@ export default class Stars {
     // This is called once before the game loads.
     constructor() {
         this.stars = [];
+
+        for (let i = 0; i < 100; i++) {
+            this.addStar(true);
+        }
     }
 
     public update(): void {
-        this.addStar();
+        this.addStar(false);
         this.updateStars();
     }
 
-    private addStar(): void {
+    private addStar(pre: boolean): void {
         let x = Math.random();
 
         this.stars.push({
             x: x,
-            y: 0,
+            y: pre ? Math.random() : 0,
             a: 0,
             w: Math.abs(Math.abs(x - .5) + (Math.random() - .5) * .3),
             // How close is a star? => Width, speed
