@@ -1,5 +1,6 @@
 
-import Stars from "./stars"
+import Stars from "./lib/stars"
+import Hero from "./lib/hero"
 
 export default class Game {
 	// Canvas
@@ -12,6 +13,7 @@ export default class Game {
 
     // ...
     public stars: Stars;
+    public hero: Hero;
 
 	// This is called once before the game loads.
 	public setup(): void {
@@ -21,7 +23,9 @@ export default class Game {
 		this.ctx = this.canvas.getContext("2d");
 		this.ctx.imageSmoothingEnabled = false;
 
+        // ...
         this.stars = new Stars();
+        this.hero = new Hero();
 	}
 
 
@@ -36,8 +40,9 @@ export default class Game {
 		this.width = this.canvas.width;
 		this.height = this.canvas.height;
 
-        // Stars
+        // ...
         this.stars.update();
+        this.hero.update();
 	}
 
 	// This is called at best 60 times every second
@@ -47,7 +52,8 @@ export default class Game {
 		this.ctx.fillStyle = "black";
 		this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-        // Stars
+        // ...
         this.stars.render(this.canvas, this.ctx);
+        this.hero.render(this.canvas, this.ctx);
 	}
 }

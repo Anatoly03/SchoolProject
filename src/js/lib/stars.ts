@@ -8,8 +8,6 @@ export default class Stars {
         this.stars = [];
     }
 
-    // This is called at best 60 times every second
-    // Use this function for updating variables
     public update(): void {
         if (this.stars.length < 10000)
             this.stars.push({
