@@ -1,4 +1,5 @@
 
+import Box2D from "./box2d"
 
 export default class ParticleManager {
     public particles: Particle[];
@@ -28,39 +29,28 @@ export default class ParticleManager {
     }
 }
 
-class Particle {
-
-    public alive: boolean;
-
-    public x: number;
-    public y: number;
-
-    public xVel: number;
-    public yVel: number;
-
-    public xHitbox: number;
-    public yHitbox: number;
+class Particle extends Box2D {
 
     constructor(params: any) {
-        this.alive = true;
-
-        this.x = params.x;
-        this.y = params.y;
-
-        this.xVel = params.xVel || 0;
-        this.yVel = params.yVel || 0;
-
-        this.xHitbox = params.xHitbox || 16;
-        this.yHitbox = params.yHitbox || 16;
+        super(params);
     }
 
     public update(): void {
-        this.x += this.xVel;
-        this.y += this.yVel;
+        super.automateUpdate();
     }
 
     public render(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D): void {
         ctx.fillStyle = "green";
         ctx.fillRect(canvas.width * this.x - this.xHitbox * .5, canvas.height * this.y - this.yHitbox * .5, this.xHitbox, this.yHitbox);
+    }
+
+    public get alive(): boolean {
+        if (this.x < -.1 || this.x > 1.1)
+            return false;
+
+        if (this.y < -.1 || this.y > 1.1)
+            return false;
+
+        return true;
     }
 }
