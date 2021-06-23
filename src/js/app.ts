@@ -5,6 +5,16 @@ class App {
 
 	constructor() {
 		this.game = new Game();
+
+		// document.addEventListener('mouseover', event => {});
+		// document.addEventListener('click', event => {});
+		
+		document.addEventListener('keydown', event => {
+			this.game.onKeyTouchBegan(event.key.toLowerCase());
+		});
+		document.addEventListener('keyup', event => {
+			this.game.onKeyTouchEnded(event.key.toLowerCase());
+		});
 	}
 
 	public setup(): void {
