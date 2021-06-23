@@ -37,6 +37,11 @@ export default class Hero {
     public render(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D): void {
         ctx.fillStyle = "white";
         ctx.fillRect(canvas.width * this.x - 64, canvas.height * .8, 128, 128);
+
+        ctx.fillStyle = "grey";
+        ctx.textAlign = "center";
+		ctx.font = "30px Arial";
+		ctx.fillText("HERO", canvas.width * this.x, canvas.height * .8 + 64);
     }
 
     // Hero Methods
