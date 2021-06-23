@@ -1,6 +1,7 @@
 
 import Stars from "./lib/stars"
 import Hero from "./lib/hero"
+import ParticleManager from "./lib/particle"
 
 export default class Game {
     // Canvas
@@ -14,6 +15,7 @@ export default class Game {
     // ...
     public stars: Stars;
     public hero: Hero;
+    private particles: ParticleManager;
 
     private keys: any; //string[];
 
@@ -30,6 +32,7 @@ export default class Game {
 
         this.stars = new Stars();
         this.hero = new Hero();
+        this.particles = new ParticleManager();
     }
 
 
@@ -46,7 +49,8 @@ export default class Game {
 
         // ...
         this.stars.update();
-        this.hero.update(this.keys);
+        this.hero.update(this.keys, this.particles);
+        this.particles.update();
     }
 
     // This is called at best 60 times every second
@@ -59,6 +63,7 @@ export default class Game {
         // ...
         this.stars.render(this.canvas, this.ctx);
         this.hero.render(this.canvas, this.ctx);
+        this.particles.render(this.canvas, this.ctx);
     }
 
     public onKeyTouchBegan(key: string): void {
