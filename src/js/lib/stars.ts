@@ -72,7 +72,7 @@ export default class Stars {
             //this.ctx.ellipse(this.canvas.width * star.x, this.canvas.height * star.y, 5, 5, 0, 0, 0);
             //this.ctx.fillRect(this.canvas.width * star.x, this.canvas.height * star.y, 5, 5);
 
-            ctx.strokeStyle = `rgb(${255 * star.a}, ${255 * star.a}, ${255 * star.a})`
+            ctx.strokeStyle = `rgb(${star.w * 255 * star.a}, ${star.w * 255 * star.a}, ${star.w * 255 * star.a})`
 
             ctx.beginPath();
             ctx.moveTo(canvas.width * star.x, canvas.height * star.y);
