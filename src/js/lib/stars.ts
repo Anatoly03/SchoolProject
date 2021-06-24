@@ -19,12 +19,13 @@ export default class Stars {
 
     private addStar(pre: boolean): void {
         let x = Math.random();
+        let random = .5;
 
         this.stars.push({
             x: x,
             y: pre ? Math.random() : 0,
             a: 0,
-            w: Math.abs(Math.abs(x - .5) + (Math.random() - .5) * .3),
+            w: Math.abs(Math.abs(x - .5) + (Math.random() - .5) * random),
             // How close is a star? => Width, speed
             // Calculation: Further from the centre a star, the higher the width + random
         });
