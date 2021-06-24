@@ -1,5 +1,6 @@
 
 import Box2D from "./box2d"
+import { width, height } from "../game";
 
 export default class ParticleManager {
     public particles: Particle[];
@@ -49,7 +50,16 @@ class Particle extends Box2D {
             return false;
 
         if (this.y < -.1 || this.y > 1.1)
-            return false;
+
+    public render(ctx: CanvasRenderingContext2D): void {
+        ctx.fillStyle = this.collided ? "red" : "green";
+        ctx.fillRect(
+            width * this.x - this.xHitbox * .5,
+            height * this.y - this.yHitbox * .5,
+            this.xHitbox,
+            this.yHitbox
+        );
+    }
 
         return true;
     }

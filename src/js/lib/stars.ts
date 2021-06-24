@@ -1,4 +1,6 @@
 
+import { width, height } from "../game";
+
 export default class Stars {
 
     public stars: any[];
@@ -60,7 +62,7 @@ export default class Stars {
         }
     }
 
-    public render(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D): void {
+    public render(ctx: CanvasRenderingContext2D): void {
         for (let i = 0; i < this.stars.length; i++) {
             let star = this.stars[i];
 
@@ -75,8 +77,8 @@ export default class Stars {
             ctx.strokeStyle = `rgb(${star.w * 255 * star.a}, ${star.w * 255 * star.a}, ${star.w * 255 * star.a})`
 
             ctx.beginPath();
-            ctx.moveTo(canvas.width * star.x, canvas.height * star.y);
-            ctx.lineTo(canvas.width * star.x, canvas.height * star.y + yDif);
+            ctx.moveTo(width * star.x, height * star.y);
+            ctx.lineTo(width * star.x, height * star.y + yDif);
             ctx.stroke();
         }
     }

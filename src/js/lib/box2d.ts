@@ -1,19 +1,20 @@
 
 import ParticleManager from "./particle"
+import { width, height } from "../game";
 
 export default class Box2D {
 
-    public x: number;
-    public y: number;
+    public x: number; // percentage of game screen
+    public y: number; // percentage of game screen
 
-    public xSpeed: number;
-    public ySpeed: number;
+    public xSpeed: number; // percentage of game screen
+    public ySpeed: number; // percentage of game screen
 
-    public width: number;
-    public height: number;
+    public w: number; // absolute pixel
+    public h: number; // absolute pixel
 
-    public xHitbox: number;
-    public yHitbox: number;
+    public xHitbox: number; // absolute pixel
+    public yHitbox: number; // absolute pixel
 
     constructor(params: any) {
         this.x = params.x || 0;
@@ -22,8 +23,8 @@ export default class Box2D {
         this.xSpeed = params.xSpeed || 0;
         this.ySpeed = params.ySpeed || 0;
 
-        this.width = params.width || 32;
-        this.height = params.height || 32;
+        this.w = params.width || 32;
+        this.h = params.height || 32;
 
         this.xHitbox = params.xHitbox || 16;
         this.yHitbox = params.yHitbox || 16;
@@ -41,12 +42,17 @@ export default class Box2D {
         this.y += this.ySpeed;
     }
 
-    public render(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D): void {
+    public render(ctx: CanvasRenderingContext2D): void {
         ctx.fillStyle = "white";
-        ctx.fillRect(canvas.width * this.x - this.width * .5, canvas.height * this.y - this.height * .5, this.width, this.height);
+        ctx.fillRect(
+            width * this.x - this.w * .5,
+            height * this.y - this.h * .5,
+            this.w,
+            this.h
+        );
     }
 
-    public isOutOfBorder (): void {
+    public isOutOfBorder(): void {
 
     }
 }

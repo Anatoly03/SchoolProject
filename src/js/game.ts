@@ -3,7 +3,8 @@ import Stars from "./lib/stars"
 import Hero from "./lib/hero"
 import ParticleManager from "./lib/particle"
 
-export default class Game {
+export let width: number;
+export let height: number;
     // Canvas
     private canvas: HTMLCanvasElement;
     private ctx: CanvasRenderingContext2D;
@@ -21,9 +22,9 @@ export default class Game {
 
     // This is called once before the game loads.
     public setup(): void {
-        this.canvas = <HTMLCanvasElement>document.getElementById('canvas');
-        this.canvas.width = window.innerWidth;
-        this.canvas.height = window.innerHeight;
+        this.canvas = <HTMLCanvasElement> document.getElementById('canvas');
+        width = this.canvas.width = window.innerWidth;
+        height = this.canvas.height = window.innerHeight;
         this.ctx = this.canvas.getContext("2d");
         this.ctx.imageSmoothingEnabled = false;
 
@@ -44,8 +45,8 @@ export default class Game {
         this.ctx = this.canvas.getContext("2d");
 
         // Variables
-        this.width = this.canvas.width;
-        this.height = this.canvas.height;
+        width = this.canvas.width;
+        height = this.canvas.height;
 
         // ...
         this.stars.update();
@@ -61,9 +62,9 @@ export default class Game {
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
         // ...
-        this.stars.render(this.canvas, this.ctx);
-        this.hero.render(this.canvas, this.ctx);
-        this.particles.render(this.canvas, this.ctx);
+        this.stars.render(this.ctx);
+        this.hero.render(this.ctx);
+        this.particles.render(this.ctx);
     }
 
     public onKeyTouchBegan(key: string): void {
