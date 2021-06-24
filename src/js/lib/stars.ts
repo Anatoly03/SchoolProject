@@ -7,7 +7,7 @@ export default class Stars {
     constructor() {
         this.stars = [];
 
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < 150; i++) {
             this.addStar(true);
         }
     }
@@ -39,7 +39,7 @@ export default class Stars {
 
             //let xDif = Math.abs(star.x - .5) / 50;
             //let yDif = Math.abs(star.y - .5) / 50;
-            let yDif = .005 + star.w * .05 // star.w * .005
+            let yDif = .005 + star.w * .05 - Math.abs(star.x - .5) * .02 // star.w * .005
 
             //star.x += star.x > 0.5 ? xDif : -xDif
             //star.y += star.y > 0.5 ? yDif : -yDif
