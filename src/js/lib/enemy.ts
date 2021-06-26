@@ -66,7 +66,7 @@ class Enemy extends Box2D {
         params.type = "ENEMY";
         super(params);
 
-        this.hp = params.hp || 100;
+        this.hp = params.hp || 200;
         this.canShoot = true;
         this.shootCooldown = 150;
 
@@ -102,10 +102,14 @@ class Enemy extends Box2D {
             x: this.x,
             y: this.y,
             ySpeed: .01,
-            width: .02,
-            height: .02,
+            width: .01,
+            height: .01,
             sender: "ENEMY",
         })
+    }
+
+    public collide(obj: Box2D) {
+        this.hp -= 40;
     }
 
     public get alive(): boolean {

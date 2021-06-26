@@ -68,6 +68,17 @@ export default class Hero extends Box2D {
             height * this.h
         );
 
+        /*
+        ctx.strokeStyle = "red";
+        ctx.lineWidth = 2;
+        ctx.strokeRect(
+            width * this.x - width * this.xHitbox * .5,
+            height * this.y - height * this.yHitbox * .5,
+            width * this.xHitbox,
+            height * this.yHitbox
+        );
+        */
+
         ctx.fillStyle = "grey";
         ctx.textAlign = "center";
 		ctx.font = "15px Arial";
@@ -81,13 +92,13 @@ export default class Hero extends Box2D {
             x: this.x,
             y: this.y,
             ySpeed: -.01,
-            width: .02,
-            height: .02,
+            width: .01,
+            height: .01,
             sender: "HERO",
         })
     }
 
-    public collide() {
-
+    public collide(obj: Box2D) {
+        this.hp -= 50;
     }
 }

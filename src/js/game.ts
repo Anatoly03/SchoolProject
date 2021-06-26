@@ -64,6 +64,12 @@ export class Game {
         this.hero.update(this.keys, this.particles);
         this.enemies.update(this.particles);
         this.particles.update();
+
+        this.particles.checkCollision(this.hero);
+        for (let i = 0; i < this.enemies.enemies.length; i++) {
+            this.particles.checkCollision(this.enemies.enemies[i]);
+        }
+
         this.overlay.update();
     }
 

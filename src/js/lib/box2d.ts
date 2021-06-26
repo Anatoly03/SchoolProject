@@ -30,8 +30,8 @@ export default class Box2D {
         this.w = params.width || .01;
         this.h = params.height || .01;
 
-        this.xHitbox = params.xHitbox /*|| params.width*/ || .01;
-        this.yHitbox = params.yHitbox /*|| params.height*/ || .01;
+        this.xHitbox = params.xHitbox || params.width || .01;
+        this.yHitbox = params.yHitbox || params.height || .01;
     }
 
     /*public update(
