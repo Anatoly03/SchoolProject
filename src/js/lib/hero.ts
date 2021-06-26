@@ -5,20 +5,15 @@ import { width, height } from "../game";
 
 export default class Hero extends Box2D {
 
-    public x: number;
-    public y: number;
-
-    public xSpeed: number;
-    public ySpeed: number;
-
-    public width: number;
-    public height: number;
-
-    public canShoot: boolean;
+    private canShoot: boolean;
     public shootCooldown: number;
+
+    public hp: number;
+    public maxHp: number;
 
     constructor() {
         super({
+            type: "HERO",
             x: .5,
             y: .9,
             xSpeed: .005,
@@ -29,6 +24,9 @@ export default class Hero extends Box2D {
 
         this.canShoot = true;
         this.shootCooldown = 250;
+
+        this.hp = 500;
+        this.maxHp = 500;
     }
 
     public update(keys: any, particles: ParticleManager): void {
@@ -87,5 +85,9 @@ export default class Hero extends Box2D {
             height: .02,
             sender: "HERO",
         })
+    }
+
+    public collide() {
+
     }
 }

@@ -4,6 +4,8 @@ import { width, height } from "../game";
 
 export default class Box2D {
 
+    public type: string; // type of physical object: "HERO" | "NEUTRAL" | "ENEMY"
+
     public x: number; // percentage of game screen
     public y: number; // percentage of game screen
 
@@ -17,6 +19,8 @@ export default class Box2D {
     public yHitbox: number; // absolute pixel
 
     constructor(params: any) {
+        this.type = params.type || "NEUTRAL";
+
         this.x = params.x || 0;
         this.y = params.y || 0;
 
@@ -52,7 +56,7 @@ export default class Box2D {
         );
     }
 
-    public isOutOfBorder(): void {
-
+    public collide(anotherObject: Box2D): void {
+        // Collide with another object
     }
 }

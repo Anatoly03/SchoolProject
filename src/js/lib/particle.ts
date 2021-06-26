@@ -16,7 +16,7 @@ export default class ParticleManager {
             // Check collision
             for (let j = i + 1; j < this.particles.length; j++) {
                 if (this.particles[i].sender != this.particles[j].sender) // Your particles don't collide with you.
-                    if (this.checkCollision(this.particles[i], this.particles[j])) {
+                    if (this.checkParticleCollision(this.particles[i], this.particles[j])) {
                         this.particles[i].collide(this.particles[j]);
                         this.particles[j].collide(this.particles[i]);
                     }
@@ -38,18 +38,31 @@ export default class ParticleManager {
         )
     }
 
-    private checkCollision(p1: Box2D, p2: Box2D) {
+    private checkParticleCollision(p1: Box2D, p2: Box2D) {
         return ((Math.abs(p1.x - p2.x)) * 2 < (p1.xHitbox + p2.xHitbox)) &&
             ((Math.abs(p1.y - p2.y)) * 2 < (p1.yHitbox + p2.yHitbox))
+    }
+
+    public checkCollision(obj: Box2D) {
+        for (let i = 0; i < this.particles.length; i++) {
+            let particle: Particle = this.particles[i];
+
+            if (((Math.abs(particle.x - obj.x)) * 2 < (particle.xHitbox + obj.xHitbox)) &&
+            ((Math.abs(particle.y - obj.y)) * 2 < (particle.yHitbox + obj.yHitbox))) {
+                particle.collide(obj);
+                obj.collide(particle);
+            }
+        }
     }
 }
 
 class Particle extends Box2D {
 
     public alive: boolean;
-    public sender: "HERO" | "NEUTRAL" | "ENEMY";
+    public sender: string;
 
     constructor(params: any) {
+        params.type = "PARTICLE";
         super(params);
 
         this.alive = true;
@@ -76,7 +89,7 @@ class Particle extends Box2D {
         );
     }
 
-    public collide(p: Particle): void {
+    public collide(obj: Box2D): void {
         this.alive = false;
     }
 }

@@ -2,6 +2,7 @@
 import Stars from "./lib/stars"
 import Hero from "./lib/hero"
 import ParticleManager from "./lib/particle"
+import Overlay from "./lib/overlay"
 
 export let width: number;
 export let height: number;
@@ -17,6 +18,7 @@ export let height: number;
     public stars: Stars;
     public hero: Hero;
     private particles: ParticleManager;
+    private overlay: Overlay;
 
     private keys: any; //string[];
 
@@ -34,6 +36,10 @@ export let height: number;
         this.stars = new Stars();
         this.hero = new Hero();
         this.particles = new ParticleManager();
+        this.overlay = new Overlay({
+            hero: this.hero,
+            enemies: this.enemies
+        });
     }
 
 
@@ -52,6 +58,7 @@ export let height: number;
         this.stars.update();
         this.hero.update(this.keys, this.particles);
         this.particles.update();
+        this.overlay.update();
     }
 
     // This is called at best 60 times every second
@@ -65,6 +72,7 @@ export let height: number;
         this.stars.render(this.ctx);
         this.hero.render(this.ctx);
         this.particles.render(this.ctx);
+        this.overlay.render(this.ctx);
     }
 
     public onKeyTouchBegan(key: string): void {
