@@ -23,8 +23,8 @@ export default class Hero extends Box2D {
             y: .9,
             xSpeed: .005,
             ySpeed: .005,
-            width: 96,
-            height: 64
+            width: .1,
+            height: .1
         });
 
         this.canShoot = true;
@@ -64,10 +64,10 @@ export default class Hero extends Box2D {
     public render(ctx: CanvasRenderingContext2D): void {
         ctx.fillStyle = "white";
         ctx.fillRect(
-            width * this.x - this.w * .5,
-            height * this.y - this.h * .5,
-            this.w,
-            this.h
+            width * this.x - width * this.w * .5,
+            height * this.y - height * this.h * .5,
+            width * this.w,
+            height * this.h
         );
 
         ctx.fillStyle = "grey";
@@ -83,6 +83,9 @@ export default class Hero extends Box2D {
             x: this.x,
             y: this.y,
             ySpeed: -.01,
+            width: .02,
+            height: .02,
+            sender: "HERO",
         })
     }
 }

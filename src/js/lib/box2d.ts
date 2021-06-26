@@ -23,11 +23,11 @@ export default class Box2D {
         this.xSpeed = params.xSpeed || 0;
         this.ySpeed = params.ySpeed || 0;
 
-        this.w = params.width || 32;
-        this.h = params.height || 32;
+        this.w = params.width || .01;
+        this.h = params.height || .01;
 
-        this.xHitbox = params.xHitbox || 16;
-        this.yHitbox = params.yHitbox || 16;
+        this.xHitbox = params.xHitbox /*|| params.width*/ || .01;
+        this.yHitbox = params.yHitbox /*|| params.height*/ || .01;
     }
 
     /*public update(
