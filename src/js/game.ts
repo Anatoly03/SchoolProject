@@ -2,10 +2,13 @@
 import Stars from "./lib/stars"
 import Hero from "./lib/hero"
 import ParticleManager from "./lib/particle"
+import EnemyManager from "./lib/enemy"
 import Overlay from "./lib/overlay"
 
 export let width: number;
 export let height: number;
+
+export class Game {
     // Canvas
     private canvas: HTMLCanvasElement;
     private ctx: CanvasRenderingContext2D;
@@ -17,6 +20,7 @@ export let height: number;
     // ...
     public stars: Stars;
     public hero: Hero;
+    private enemies: EnemyManager;
     private particles: ParticleManager;
     private overlay: Overlay;
 
@@ -35,6 +39,7 @@ export let height: number;
 
         this.stars = new Stars();
         this.hero = new Hero();
+        this.enemies = new EnemyManager();
         this.particles = new ParticleManager();
         this.overlay = new Overlay({
             hero: this.hero,
@@ -57,6 +62,7 @@ export let height: number;
         // ...
         this.stars.update();
         this.hero.update(this.keys, this.particles);
+        this.enemies.update(this.particles);
         this.particles.update();
         this.overlay.update();
     }
@@ -71,8 +77,22 @@ export let height: number;
         // ...
         this.stars.render(this.ctx);
         this.hero.render(this.ctx);
+        this.enemies.render(this.ctx);
         this.particles.render(this.ctx);
         this.overlay.render(this.ctx);
+
+        // Debug
+        if (this.keys["f3"]) {
+            let size = Math.floor(.05 * height);
+
+            this.ctx.fillStyle = "white";
+            this.ctx.font = size + "px Arial";
+            this.ctx.fillText("" + this.stars.stars.length, this.canvas.width * .9, 20 + size);
+            
+            this.ctx.fillStyle = "green";
+            this.ctx.font = size + "px Arial";
+            this.ctx.fillText("" + this.particles.particles.length, this.canvas.width * .9, 20 + size * 2);
+        }
     }
 
     public onKeyTouchBegan(key: string): void {
