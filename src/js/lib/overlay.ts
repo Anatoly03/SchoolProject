@@ -33,6 +33,23 @@ export default class Overlay {
                     40
                 );
             }
+
+            ctx.fillStyle = "white";
+            ctx.fillRect(
+                width * .99 - 515,
+                height * .9,
+                510,
+                50
+            );
+            if (this.hero.energy > 0) {
+                ctx.fillStyle = "blue";
+                ctx.fillRect(
+                    width * .99 - 510,
+                    height * .9 + 5,
+                    500 * this.hero.energy / this.hero.maxEnergy,
+                    40
+                );
+            }
         } else {
             let size = Math.floor(.2 * height);
             ctx.textAlign = 'center';

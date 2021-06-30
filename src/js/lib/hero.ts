@@ -10,6 +10,8 @@ export default class Hero extends Box2D {
 
     public hp: number;
     public maxHp: number;
+    public energy: number;
+    public maxEnergy: number;
 
     constructor() {
         super({
@@ -23,10 +25,13 @@ export default class Hero extends Box2D {
         });
 
         this.canShoot = true;
-        this.shootCooldown = 250;
+        this.shootCooldown = 50;
 
         this.hp = 500;
         this.maxHp = 500;
+
+        this.energy = 100;
+        this.maxEnergy = 100;
     }
 
     public update(keys: any, particles: ParticleManager): void {
@@ -52,10 +57,15 @@ export default class Hero extends Box2D {
             this.y = Math.min(.9, this.y);
         }*/
 
-        if ((keys[" "] || keys["x"]) && this.canShoot) {
+        if ((keys[" "] || keys["x"]) && this.canShoot && this.energy > 5) {
             this.canShoot = false;
+            this.energy -= 5;
             setTimeout(() => this.canShoot = true, this.shootCooldown);
             this.shoot(particles);
+        }
+
+        if (this.energy < this.maxEnergy) {
+            this.energy += .2;
         }
     }
 
