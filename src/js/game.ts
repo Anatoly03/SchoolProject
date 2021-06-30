@@ -7,6 +7,7 @@ import Overlay from "./lib/overlay"
 
 export let width: number;
 export let height: number;
+export let state: number;
 
 export class Game {
     // Canvas
@@ -28,7 +29,7 @@ export class Game {
 
     // This is called once before the game loads.
     public setup(): void {
-        this.canvas = <HTMLCanvasElement> document.getElementById('canvas');
+        this.canvas = <HTMLCanvasElement>document.getElementById('canvas');
         width = this.canvas.width = window.innerWidth;
         height = this.canvas.height = window.innerHeight;
         this.ctx = this.canvas.getContext("2d");
@@ -36,6 +37,7 @@ export class Game {
 
         // ...
         this.keys = {}; // [];
+        state = 0;
 
         this.stars = new Stars();
         this.hero = new Hero();
@@ -61,16 +63,23 @@ export class Game {
 
         // ...
         this.stars.update();
-        this.hero.update(this.keys, this.particles);
-        this.enemies.update(this.particles);
-        this.particles.update();
 
-        this.particles.checkCollision(this.hero);
-        for (let i = 0; i < this.enemies.enemies.length; i++) {
-            this.particles.checkCollision(this.enemies.enemies[i]);
+        if (state == 0) {
+            this.hero.update(this.keys, this.particles);
+            this.enemies.update(this.particles);
+            this.particles.update();
+
+            this.particles.checkCollision(this.hero);
+            for (let i = 0; i < this.enemies.enemies.length; i++) {
+                this.particles.checkCollision(this.enemies.enemies[i]);
+            }
         }
 
         this.overlay.update();
+
+        if (this.hero.hp <= 0) {
+            state = 1;
+        }
     }
 
     // This is called at best 60 times every second
@@ -82,9 +91,12 @@ export class Game {
 
         // ...
         this.stars.render(this.ctx);
-        this.hero.render(this.ctx);
-        this.enemies.render(this.ctx);
-        this.particles.render(this.ctx);
+
+        if (state == 0) {
+            this.hero.render(this.ctx);
+            this.enemies.render(this.ctx);
+            this.particles.render(this.ctx);
+        }
         this.overlay.render(this.ctx);
 
         // Debug
@@ -94,7 +106,7 @@ export class Game {
             this.ctx.fillStyle = "white";
             this.ctx.font = size + "px Arial";
             this.ctx.fillText("" + this.stars.stars.length, this.canvas.width * .9, 20 + size);
-            
+
             this.ctx.fillStyle = "green";
             this.ctx.font = size + "px Arial";
             this.ctx.fillText("" + this.particles.particles.length, this.canvas.width * .9, 20 + size * 2);
