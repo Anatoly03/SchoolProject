@@ -47,7 +47,7 @@ export default class Hero extends Box2D {
             this.x = Math.max(.1, this.x);
         }
 
-        /*if (keys["arrowup"] || keys["w"]) {
+        if (keys["arrowup"] || keys["w"]) {
             this.y -= this.ySpeed;
             this.y = Math.max(.1, this.y);
         }
@@ -55,7 +55,7 @@ export default class Hero extends Box2D {
         if (keys["arrowdown"] || keys["s"]) {
             this.y += this.ySpeed;
             this.y = Math.min(.9, this.y);
-        }*/
+        }
 
         if ((keys[" "] || keys["x"]) && this.canShoot && this.energy > 5) {
             this.canShoot = false;
