@@ -15,37 +15,36 @@ class App {
 
 	public setup(): void {
 		canvas = <HTMLCanvasElement>document.getElementById('canvas');
-        width = canvas.width = window.innerWidth;
-        height = canvas.height = window.innerHeight;
-        ctx = canvas.getContext("2d");
-        ctx.imageSmoothingEnabled = false;
-
-		//this
+		this.setVariables();
 		this.addEventLiteners();
 		this.game.setup();
+	}
+
+	public gameLoop(): void {
+		requestAnimationFrame(this.gameLoop.bind(this));
+		this.setVariables();
+		this.game.update();
+		this.game.render();
+	}
+
+	private setVariables(): void {
+		width = canvas.width = window.innerWidth;
+		height = canvas.height = window.innerHeight;
+		ctx = canvas.getContext("2d");
+		ctx.imageSmoothingEnabled = false;
 	}
 
 	private addEventLiteners(): void {
 		// document.addEventListener('mouseover', event => {});
 		// document.addEventListener('click', event => {});
-		
+
 		document.addEventListener('keydown', event => {
 			keys[event.key.toLowerCase()] = true;
 		});
+
 		document.addEventListener('keyup', event => {
 			delete keys[event.key.toLowerCase()];
 		});
-	}
-
-	public gameLoop(): void {
-		requestAnimationFrame(this.gameLoop.bind(this));
-
-		canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        ctx = canvas.getContext("2d");
-
-		this.game.update();
-		this.game.render();
 	}
 }
 
