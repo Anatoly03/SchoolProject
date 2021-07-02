@@ -23,10 +23,9 @@ class App {
 		//this
 		this.addEventLiteners();
 		this.game.setup();
-		this.gameLoop();
 	}
 
-	public addEventLiteners(): void {
+	private addEventLiteners(): void {
 		// document.addEventListener('mouseover', event => {});
 		// document.addEventListener('click', event => {});
 		
@@ -38,7 +37,7 @@ class App {
 		});
 	}
 
-	private gameLoop(): void {
+	public gameLoop(): void {
 		requestAnimationFrame(this.gameLoop.bind(this));
 
 		canvas.width = window.innerWidth;
@@ -53,4 +52,5 @@ class App {
 window.onload = () => {
 	let app = new App();
 	app.setup();
+	app.gameLoop();
 }
