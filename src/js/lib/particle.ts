@@ -7,6 +7,10 @@ export default class ParticleManager {
 
     constructor() {
         this.particles = [];
+        this.spawnParticleMass({
+            x: .5,
+            y: .5,
+        });
     }
 
     public update(): void {
@@ -36,6 +40,19 @@ export default class ParticleManager {
         this.particles.push(
             new Particle(params)
         )
+    }
+
+    public spawnParticleMass(params: any) {
+        for (let i = 0; i < 50; i++) {
+            this.add({
+                x: (params.x || .5) + Math.sin(i) * .1,
+                y: (params.y || .5) + Math.cos(i) * .1,
+                width: 0.01,
+                type: params.type ||'ENEMY',
+                xSpeed: Math.sin(i) * .005,
+                ySpeed: Math.cos(i) * .005,
+            });
+        }
     }
 
     private checkParticleCollision(p1: Box2D, p2: Box2D) {
