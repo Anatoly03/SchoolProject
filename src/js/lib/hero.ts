@@ -25,7 +25,7 @@ export default class Hero extends Box2D {
         });
 
         this.canShoot = true;
-        this.shootCooldown = 50;
+        this.shootCooldown = 150;
 
         this.hp = 500;
         this.maxHp = 500;

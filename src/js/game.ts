@@ -35,18 +35,9 @@ export class Game {
         this.ctx = this.canvas.getContext("2d");
         this.ctx.imageSmoothingEnabled = false;
 
-        // ...
-        this.keys = {}; // [];
-        state = 0;
-
+        this.keys = {};
         this.stars = new Stars();
-        this.hero = new Hero();
-        this.enemies = new EnemyManager();
-        this.particles = new ParticleManager();
-        this.overlay = new Overlay({
-            hero: this.hero,
-            enemies: this.enemies
-        });
+        this.startGame();
     }
 
 
@@ -72,6 +63,10 @@ export class Game {
             this.particles.checkCollision(this.hero);
             for (let i = 0; i < this.enemies.enemies.length; i++) {
                 this.particles.checkCollision(this.enemies.enemies[i]);
+            }
+        } else {
+            if (this.keys["enter"] || this.keys[" "]) {
+                this.startGame();
             }
         }
 
@@ -129,5 +124,16 @@ export class Game {
     public onKeyTouchEnded(key: string): void {
         //this.keys = this.keys.filter(k => k != key)
         delete this.keys[key];
+    }
+
+    private startGame() {
+        state = 0;
+        this.hero = new Hero();
+        this.enemies = new EnemyManager();
+        this.particles = new ParticleManager();
+        this.overlay = new Overlay({
+            hero: this.hero,
+            enemies: this.enemies
+        });
     }
 }
