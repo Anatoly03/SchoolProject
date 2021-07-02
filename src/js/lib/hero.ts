@@ -1,7 +1,7 @@
 
 import ParticleManager from "./particle"
 import Box2D from "./box2d"
-import { width, height, ctx } from "../app";
+import { width, height, ctx, keys } from "../app";
 
 export default class Hero extends Box2D {
 
@@ -34,7 +34,7 @@ export default class Hero extends Box2D {
         this.maxEnergy = 100;
     }
 
-    public update(keys: any, particles: ParticleManager): void {
+    public update(particles: ParticleManager): void {
         // console.log(keys);
 
         if (keys["arrowright"] || keys["d"]) {

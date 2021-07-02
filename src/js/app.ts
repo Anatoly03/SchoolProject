@@ -4,7 +4,7 @@ export let width: number;
 export let height: number;
 export let canvas: HTMLCanvasElement;
 export let ctx: CanvasRenderingContext2D;
-export let keys: { [key: string]: boolean; };
+export let keys: { [key: string]: boolean; } = {};
 
 class App {
 	private game: Game;
@@ -31,10 +31,10 @@ class App {
 		// document.addEventListener('click', event => {});
 		
 		document.addEventListener('keydown', event => {
-			this.game.onKeyTouchBegan(event.key.toLowerCase());
+			keys[event.key.toLowerCase()] = true;
 		});
 		document.addEventListener('keyup', event => {
-			this.game.onKeyTouchEnded(event.key.toLowerCase());
+			delete keys[event.key.toLowerCase()];
 		});
 	}
 

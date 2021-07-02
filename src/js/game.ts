@@ -1,5 +1,5 @@
 
-import { width, height, ctx } from "./app";
+import { width, height, ctx, keys } from "./app";
 
 import Stars from "./lib/stars"
 import Hero from "./lib/hero"
@@ -16,11 +16,8 @@ export class Game {
     private particles: ParticleManager;
     private overlay: Overlay;
 
-    private keys: any; //string[];
-
     // This is called once before the game loads.
     public setup(): void {
-        this.keys = {};
         this.stars = new Stars();
         this.startGame();
     }
@@ -32,7 +29,7 @@ export class Game {
         this.stars.update();
 
         if (state == 0) {
-            this.hero.update(this.keys, this.particles);
+            this.hero.update(this.particles);
             this.enemies.update(this.particles);
             this.particles.update();
 
@@ -41,7 +38,7 @@ export class Game {
                 this.particles.checkCollision(this.enemies.enemies[i]);
             }
         } else {
-            if (this.keys["enter"] || this.keys[" "]) {
+            if (keys["enter"] || keys[" "]) {
                 this.startGame();
             }
         }
@@ -71,7 +68,7 @@ export class Game {
         this.overlay.render();
 
         // Debug
-        if (this.keys["f3"]) {
+        if (keys["f3"]) {
             let size = Math.floor(.05 * height);
 
             ctx.fillStyle = "white";
@@ -82,24 +79,6 @@ export class Game {
             ctx.font = size + "px Arial";
             ctx.fillText("" + this.particles.particles.length, width * .9, 20 + size * 2);
         }
-    }
-
-    public onKeyTouchBegan(key: string): void {
-        //this.keys.push(key);
-        /*if (this.keys[key])
-            this.onKeyHold(key);
-        else
-            this.keys[key] = 0;*/
-        this.keys[key] = true;
-    }
-
-    /*public onKeyHold(key: string): void {
-        this.keys[key] = 1;
-    }*/
-
-    public onKeyTouchEnded(key: string): void {
-        //this.keys = this.keys.filter(k => k != key)
-        delete this.keys[key];
     }
 
     private startGame() {
