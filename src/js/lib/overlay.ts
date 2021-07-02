@@ -1,5 +1,6 @@
 
-import { width, height, state } from "../game";
+import { width, height, ctx } from "../app";
+import { state } from "../game";
 import EnemyManager from "./enemy";
 import Hero from "./hero";
 
@@ -15,7 +16,7 @@ export default class Overlay {
     public update(): void {
     }
 
-    public render(ctx: CanvasRenderingContext2D): void {
+    public render(): void {
         if (state == 0) {
             ctx.fillStyle = "white";
             ctx.fillRect(

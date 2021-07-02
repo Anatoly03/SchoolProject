@@ -1,6 +1,6 @@
 
 import ParticleManager from "./particle"
-import { width, height } from "../game";
+import { width, height, ctx } from "../app";
 
 export default class Box2D {
 
@@ -46,7 +46,7 @@ export default class Box2D {
         this.y += this.ySpeed;
     }
 
-    public render(ctx: CanvasRenderingContext2D): void {
+    public render(): void {
         ctx.fillStyle = "white";
         ctx.fillRect(
             width * this.x - this.w * .5,

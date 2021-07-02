@@ -1,7 +1,7 @@
 
 import ParticleManager from "./particle"
 import Box2D from "./box2d"
-import { width, height } from "../game";
+import { width, height, ctx } from "../app";
 
 export default class Hero extends Box2D {
 
@@ -69,7 +69,7 @@ export default class Hero extends Box2D {
         }
     }
 
-    public render(ctx: CanvasRenderingContext2D): void {
+    public render(): void {
         ctx.fillStyle = "white";
         ctx.fillRect(
             width * this.x - width * this.w * .5,

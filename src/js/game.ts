@@ -1,24 +1,15 @@
 
+import { width, height, ctx } from "./app";
+
 import Stars from "./lib/stars"
 import Hero from "./lib/hero"
 import ParticleManager from "./lib/particle"
 import EnemyManager from "./lib/enemy"
 import Overlay from "./lib/overlay"
 
-export let width: number;
-export let height: number;
 export let state: number;
 
 export class Game {
-    // Canvas
-    private canvas: HTMLCanvasElement;
-    private ctx: CanvasRenderingContext2D;
-
-    // Variables
-    public width: number;
-    public height: number;
-
-    // ...
     public stars: Stars;
     public hero: Hero;
     private enemies: EnemyManager;
@@ -29,12 +20,6 @@ export class Game {
 
     // This is called once before the game loads.
     public setup(): void {
-        this.canvas = <HTMLCanvasElement>document.getElementById('canvas');
-        width = this.canvas.width = window.innerWidth;
-        height = this.canvas.height = window.innerHeight;
-        this.ctx = this.canvas.getContext("2d");
-        this.ctx.imageSmoothingEnabled = false;
-
         this.keys = {};
         this.stars = new Stars();
         this.startGame();
@@ -44,15 +29,6 @@ export class Game {
     // This is called at best 60 times every second
     // Use this function for updating variables
     public update(): void {
-        this.canvas.width = window.innerWidth;
-        this.canvas.height = window.innerHeight;
-        this.ctx = this.canvas.getContext("2d");
-
-        // Variables
-        width = this.canvas.width;
-        height = this.canvas.height;
-
-        // ...
         this.stars.update();
 
         if (state == 0) {
@@ -81,30 +57,30 @@ export class Game {
     // Use this function for drawing
     public render(): void {
         // Background
-        this.ctx.fillStyle = "black";
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        ctx.fillStyle = "black";
+        ctx.fillRect(0, 0, width, height);
 
         // ...
-        this.stars.render(this.ctx);
+        this.stars.render();
 
         if (state == 0) {
-            this.hero.render(this.ctx);
-            this.enemies.render(this.ctx);
-            this.particles.render(this.ctx);
+            this.hero.render();
+            this.enemies.render();
+            this.particles.render();
         }
-        this.overlay.render(this.ctx);
+        this.overlay.render();
 
         // Debug
         if (this.keys["f3"]) {
             let size = Math.floor(.05 * height);
 
-            this.ctx.fillStyle = "white";
-            this.ctx.font = size + "px Arial";
-            this.ctx.fillText("" + this.stars.stars.length, this.canvas.width * .9, 20 + size);
+            ctx.fillStyle = "white";
+            ctx.font = size + "px Arial";
+            ctx.fillText("" + this.stars.stars.length, width * .9, 20 + size);
 
-            this.ctx.fillStyle = "green";
-            this.ctx.font = size + "px Arial";
-            this.ctx.fillText("" + this.particles.particles.length, this.canvas.width * .9, 20 + size * 2);
+            ctx.fillStyle = "green";
+            ctx.font = size + "px Arial";
+            ctx.fillText("" + this.particles.particles.length, width * .9, 20 + size * 2);
         }
     }
 

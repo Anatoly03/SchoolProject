@@ -1,6 +1,6 @@
 
 import Box2D from "./box2d"
-import { width, height } from "../game";
+import { width, height, ctx } from "../app";
 
 export default class ParticleManager {
     public particles: Particle[];
@@ -30,9 +30,9 @@ export default class ParticleManager {
         this.particles = this.particles.filter(p => p.alive);
     }
 
-    public render(ctx: CanvasRenderingContext2D): void {
+    public render(): void {
         for (let i = 0; i < this.particles.length; i++) {
-            this.particles[i].render(ctx);
+            this.particles[i].render();
         }
     }
 
@@ -95,7 +95,7 @@ class Particle extends Box2D {
             this.alive = false;
     }
 
-    public render(ctx: CanvasRenderingContext2D): void {
+    public render(): void {
         ctx.fillStyle = "green";
         ctx.fillRect(
             width * this.x - width * this.xHitbox * .5,

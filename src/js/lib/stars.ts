@@ -1,5 +1,5 @@
 
-import { width, height } from "../game";
+import { width, height, ctx } from "../app";
 
 export default class Stars {
 
@@ -62,7 +62,7 @@ export default class Stars {
         }
     }
 
-    public render(ctx: CanvasRenderingContext2D): void {
+    public render(): void {
         for (let i = 0; i < this.stars.length; i++) {
             let star = this.stars[i];
 

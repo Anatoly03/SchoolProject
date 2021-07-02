@@ -1,7 +1,7 @@
 
 import ParticleManager from "./particle"
 import Box2D from "./box2d"
-import { width, height } from "../game";
+import { width, height, ctx } from "../app";
 
 export default class EnemyManager {
     public enemies: Enemy[];
@@ -37,9 +37,9 @@ export default class EnemyManager {
         this.enemies = this.enemies.filter(p => p.alive);
     }
 
-    public render(ctx: CanvasRenderingContext2D): void {
+    public render(): void {
         for (let i = 0; i < this.enemies.length; i++) {
-            this.enemies[i].render(ctx);
+            this.enemies[i].render();
         }
     }
 
@@ -85,7 +85,7 @@ class Enemy extends Box2D {
         }
     }
 
-    public render(ctx: CanvasRenderingContext2D): void {
+    public render(): void {
         ctx.fillStyle = "red";
         ctx.fillRect(
             width * this.x - width * this.w * .5,
