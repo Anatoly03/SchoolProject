@@ -1,6 +1,7 @@
 
 import Box2D from "./box2d"
 import { width, height, ctx } from "../app";
+import { hero, enemies } from "../game"
 
 export default class ParticleManager {
     public particles: Particle[];
@@ -27,6 +28,11 @@ export default class ParticleManager {
             }
         }
 
+        this.checkCollision(hero);
+        for (let i = 0; i < enemies.length; i++) {
+            this.checkCollision(enemies.enemies[i]);
+        }
+
         this.particles = this.particles.filter(p => p.alive);
     }
 
@@ -36,7 +42,7 @@ export default class ParticleManager {
         }
     }
 
-    public add(params: any) {
+    public emit(params: any) {
         this.particles.push(
             new Particle(params)
         )
@@ -44,7 +50,7 @@ export default class ParticleManager {
 
     public spawnParticleMass(params: any) {
         for (let i = 0; i < 50; i++) {
-            this.add({
+            this.emit({
                 x: (params.x || .5) + Math.sin(i) * .1,
                 y: (params.y || .5) + Math.cos(i) * .1,
                 width: 0.01,
@@ -71,6 +77,10 @@ export default class ParticleManager {
                     obj.collide(particle);
                 }
         }
+    }
+
+    public get length() {
+        return this.particles.length;
     }
 }
 

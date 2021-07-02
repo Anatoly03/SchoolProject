@@ -9,43 +9,37 @@ import Overlay from "./lib/overlay"
 
 export let state: number;
 
-export class Game {
-    public stars: Stars;
-    public hero: Hero;
-    private enemies: EnemyManager;
-    private particles: ParticleManager;
-    private overlay: Overlay;
+export let stars: Stars;
+export let hero: Hero;
+export let enemies: EnemyManager;
+export let particles: ParticleManager;
+export let overlay: Overlay;
 
+export class Game {
     // This is called once before the game loads.
     public setup(): void {
-        this.stars = new Stars();
+        stars = new Stars();
         this.startGame();
     }
-
 
     // This is called at best 60 times every second
     // Use this function for updating variables
     public update(): void {
-        this.stars.update();
+        stars.update();
 
         if (state == 0) {
-            this.hero.update(this.particles);
-            this.enemies.update(this.particles);
-            this.particles.update();
-
-            this.particles.checkCollision(this.hero);
-            for (let i = 0; i < this.enemies.enemies.length; i++) {
-                this.particles.checkCollision(this.enemies.enemies[i]);
-            }
+            hero.update();
+            enemies.update();
+            particles.update();
         } else {
             if (keys["enter"] || keys[" "]) {
                 this.startGame();
             }
         }
 
-        this.overlay.update();
+        overlay.update();
 
-        if (this.hero.hp <= 0) {
+        if (hero.hp <= 0) {
             state = 1;
         }
     }
@@ -57,15 +51,14 @@ export class Game {
         ctx.fillStyle = "black";
         ctx.fillRect(0, 0, width, height);
 
-        // ...
-        this.stars.render();
+        stars.render();
 
         if (state == 0) {
-            this.hero.render();
-            this.enemies.render();
-            this.particles.render();
+            hero.render();
+            enemies.render();
+            particles.render();
         }
-        this.overlay.render();
+        overlay.render();
 
         // Debug
         if (keys["f3"]) {
@@ -73,22 +66,19 @@ export class Game {
 
             ctx.fillStyle = "white";
             ctx.font = size + "px Arial";
-            ctx.fillText("" + this.stars.stars.length, width * .9, 20 + size);
+            ctx.fillText("" + stars.length, width * .9, 20 + size);
 
             ctx.fillStyle = "green";
             ctx.font = size + "px Arial";
-            ctx.fillText("" + this.particles.particles.length, width * .9, 20 + size * 2);
+            ctx.fillText("" + particles.length, width * .9, 20 + size * 2);
         }
     }
 
     private startGame() {
         state = 0;
-        this.hero = new Hero();
-        this.enemies = new EnemyManager();
-        this.particles = new ParticleManager();
-        this.overlay = new Overlay({
-            hero: this.hero,
-            enemies: this.enemies
-        });
+        hero = new Hero();
+        enemies = new EnemyManager();
+        particles = new ParticleManager();
+        overlay = new Overlay();
     }
 }

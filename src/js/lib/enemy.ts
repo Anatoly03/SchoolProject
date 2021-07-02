@@ -1,7 +1,9 @@
 
-import ParticleManager from "./particle"
-import Box2D from "./box2d"
 import { width, height, ctx } from "../app";
+import { particles } from "../game";
+
+import ParticleManager from "./particle";
+import Box2D from "./box2d";
 
 export default class EnemyManager {
     public enemies: Enemy[];
@@ -29,9 +31,9 @@ export default class EnemyManager {
         this.enemies[0].shootCooldown = 200;
     }
 
-    public update(particles: ParticleManager): void {
+    public update(): void {
         for (let i = 0; i < this.enemies.length; i++) {
-            this.enemies[i].update(particles);
+            this.enemies[i].update();
         }
 
         this.enemies = this.enemies.filter(p => p.alive);
@@ -47,6 +49,10 @@ export default class EnemyManager {
         this.enemies.push(
             new Enemy(params)
         )
+    }
+
+    public get length() {
+        return this.enemies.length;
     }
 }
 
@@ -75,7 +81,7 @@ class Enemy extends Box2D {
         //this.timeStart = Date.now();
     }
 
-    public update(particles: ParticleManager): void {
+    public update(): void {
         this.x = this.originalX + Math.sin(Date.now() * .005) * .08 + Math.cos(Date.now() * .005 * Math.PI) * .03;
 
         if (this.canShoot && this.shootCooldown != 0) {
@@ -98,7 +104,7 @@ class Enemy extends Box2D {
     // Enemy Methods
 
     public shoot(particles: ParticleManager): void {
-        particles.add({
+        particles.emit({
             x: this.x,
             y: this.y,
             ySpeed: .01,

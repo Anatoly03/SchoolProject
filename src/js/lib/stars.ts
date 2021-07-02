@@ -82,4 +82,8 @@ export default class Stars {
             ctx.stroke();
         }
     }
+    
+    public get length() {
+        return this.stars.length;
+    }
 }

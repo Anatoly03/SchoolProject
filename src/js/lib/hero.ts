@@ -1,7 +1,7 @@
 
-import ParticleManager from "./particle"
-import Box2D from "./box2d"
 import { width, height, ctx, keys } from "../app";
+import { particles } from "../game"
+import Box2D from "./box2d"
 
 export default class Hero extends Box2D {
 
@@ -34,7 +34,7 @@ export default class Hero extends Box2D {
         this.maxEnergy = 100;
     }
 
-    public update(particles: ParticleManager): void {
+    public update(): void {
         // console.log(keys);
 
         if (keys["arrowright"] || keys["d"]) {
@@ -61,7 +61,7 @@ export default class Hero extends Box2D {
             this.canShoot = false;
             this.energy -= 5;
             setTimeout(() => this.canShoot = true, this.shootCooldown);
-            this.shoot(particles);
+            this.shoot();
         }
 
         if (this.energy < this.maxEnergy) {
@@ -97,8 +97,8 @@ export default class Hero extends Box2D {
 
     // Hero Methods
 
-    public shoot(particles: ParticleManager): void {
-        particles.add({
+    public shoot(): void {
+        particles.emit({
             x: this.x,
             y: this.y,
             ySpeed: -.01,

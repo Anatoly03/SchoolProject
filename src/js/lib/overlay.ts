@@ -1,16 +1,11 @@
 
 import { width, height, ctx } from "../app";
+import { hero, enemies } from "../game";
+
 import { state } from "../game";
-import EnemyManager from "./enemy";
-import Hero from "./hero";
 
 export default class Overlay {
-    public hero: Hero;
-    public enemies: EnemyManager;
-
-    constructor(params: { hero: Hero, enemies: EnemyManager }) {
-        this.hero = params.hero;
-        this.enemies = params.enemies;
+    constructor() {
     }
 
     public update(): void {
@@ -25,12 +20,12 @@ export default class Overlay {
                 510,
                 50
             );
-            if (this.hero.hp > 0) {
+            if (hero.hp > 0) {
                 ctx.fillStyle = "red";
                 ctx.fillRect(
                     width * .01,
                     height * .9 + 5,
-                    500 * this.hero.hp / this.hero.maxHp,
+                    500 * hero.hp / hero.maxHp,
                     40
                 );
             }
@@ -42,12 +37,12 @@ export default class Overlay {
                 510,
                 50
             );
-            if (this.hero.energy > 0) {
+            if (hero.energy > 0) {
                 ctx.fillStyle = "blue";
                 ctx.fillRect(
                     width * .99 - 510,
                     height * .9 + 5,
-                    500 * this.hero.energy / this.hero.maxEnergy,
+                    500 * hero.energy / hero.maxEnergy,
                     40
                 );
             }
