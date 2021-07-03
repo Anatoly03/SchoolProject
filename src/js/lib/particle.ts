@@ -131,7 +131,7 @@ export default class ParticleManager {
                 setTimeout(() => {
                     this.updateEnemyParticles = true;
                 }, 2000)
-            }).execute(500);
+            }).execute(400);
         }
     }
 }

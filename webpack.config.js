@@ -58,7 +58,11 @@ module.exports = {
 				{
 					from:'src/assets',
 					to:'assets'
-				} 
+				},
+				{
+					from: 'src/style.css',
+					to:'style.css'
+				}
 			]
 		})
     ],

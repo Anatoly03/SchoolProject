@@ -11,7 +11,7 @@ export default class EnemyManager {
     constructor() {
         this.enemies = [];
 
-        this.add({
+        /*this.add({
             x: .2,
             y: .1,
             hp: 100,
@@ -28,7 +28,7 @@ export default class EnemyManager {
         });
 
         this.enemies[1].shootCooldown = 500;
-        this.enemies[0].shootCooldown = 200;
+        this.enemies[0].shootCooldown = 200;*/
     }
 
     public update(): void {

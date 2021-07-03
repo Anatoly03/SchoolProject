@@ -58,7 +58,7 @@ export default class Hero extends Box2D {
             this.y = Math.min(.99, this.y);
         }
 
-        if ((keys[" "] || keys["x"]) && this.canShoot && this.energy > 5) {
+        if ((keys[" "] || keys["x"]) && this.canShoot && this.energy > 5 && game.isTakingDamage) {
             this.canShoot = false;
             this.energy -= 5;
             setTimeout(() => this.canShoot = true, this.shootCooldown);
@@ -93,9 +93,10 @@ export default class Hero extends Box2D {
 
     public shoot(): void {
         for (let i = 0; i < 4; i++) {
+            let k = Math.sin(((i/3) * 45)/2);
             particles.emit({
                 x: this.x + (i-1.5) * .01,
-                y: this.y,
+                y: this.y + k * .01,
                 ySpeed: -.02,
                 width: .02,
                 height: .05,

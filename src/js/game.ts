@@ -6,20 +6,23 @@ import Hero from "./lib/hero"
 import ParticleManager from "./lib/particle"
 import EnemyManager from "./lib/enemy"
 import Overlay from "./lib/overlay"
+import Stage from "./lib/stage"
 
 export let stars: Stars;
 export let hero: Hero;
 export let enemies: EnemyManager;
 export let particles: ParticleManager;
 export let overlay: Overlay;
+export let state: number;
 
 export class Game {
-    public state: number;
+    private stage: Stage;
     public isTakingDamage: boolean;
 
     // This is called once before the game loads.
     public setup(): void {
         stars = new Stars();
+        this.stage = new Stage();
         this.startGame();
     }
 
@@ -28,7 +31,7 @@ export class Game {
     public update(): void {
         stars.update();
 
-        if (this.state == 0) {
+        if (state == 0) {
             hero.update();
             enemies.update();
             particles.update();
@@ -41,7 +44,7 @@ export class Game {
         overlay.update();
 
         if (hero.hp <= 0) {
-            this.state = 1;
+            state = 1;
         }
     }
 
@@ -50,12 +53,13 @@ export class Game {
     public render(): void {
         stars.render();
 
-        if (this.state == 0) {
+        if (state == 0) {
             hero.render();
             enemies.render();
             particles.render();
         }
         overlay.render();
+        this.stage.render();
 
         // Debug
         if (keys["f3"]) {
@@ -72,7 +76,7 @@ export class Game {
     }
 
     private startGame() {
-        this.state = 0;
+        state = 0;
         hero = new Hero();
         enemies = new EnemyManager();
         particles = new ParticleManager();

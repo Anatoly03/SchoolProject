@@ -1,6 +1,6 @@
 
 import { width, height, ctx, game, tween } from "../app";
-import { hero, enemies } from "../game";
+import { hero, enemies, state } from "../game";
 import { Content } from "./image"
 
 export default class Overlay {
@@ -15,14 +15,14 @@ export default class Overlay {
     }
 
     public render(): void {
-        if (game.state == 0) {
+        if (state == 0) {
             // Health
             if (hero.hp > 0) {
                 ctx.fillStyle = "rgb(50, 0, 0)";
                 for (let i = 0; i < hero.hp; i++) {
                     ctx.fillRect(
-                        5,
                         5 + 55 * i,
+                        5,
                         50,
                         50,
                     );
@@ -41,28 +41,21 @@ export default class Overlay {
             }
 
             // Boss
-            let bossHp = 0;
-            let totalBossHp = 0;
+            let bossHp = 1;
+            let totalBossHp = 1;
 
             for (let enemy of enemies.enemies) {
                 bossHp += enemy.hp;
                 totalBossHp += enemy.maxHp;
             }
 
-            ctx.fillStyle = "white";
-            ctx.fillRect(
-                width * .5 - 255,
-                height * .01,
-                510,
-                50
-            );
             if (bossHp > 0) {
-                ctx.fillStyle = "black";
+                ctx.fillStyle = "rgb(100, 50, 0)";
                 ctx.fillRect(
-                    width * .5 - 250,
-                    height * .01 + 5,
-                    500 * (bossHp / totalBossHp),
-                    40
+                    width - 30,
+                    height * (1 - .5 * hero.energy / hero.maxEnergy),
+                    30,
+                    height * .5 * hero.energy / hero.maxEnergy,
                 );
             }
 
