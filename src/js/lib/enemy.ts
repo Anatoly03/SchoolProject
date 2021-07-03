@@ -59,6 +59,7 @@ export default class EnemyManager {
 class Enemy extends Box2D {
 
     public hp: number;
+    public maxHp: number;
 
     public canShoot: boolean;
     public shootCooldown: number;
@@ -73,6 +74,7 @@ class Enemy extends Box2D {
         super(params);
 
         this.hp = params.hp || 200;
+        this.maxHp = params.maxHp || this.hp;
         this.canShoot = true;
         this.shootCooldown = 150;
 
@@ -88,6 +90,12 @@ class Enemy extends Box2D {
             this.canShoot = false;
             setTimeout(() => this.canShoot = true, this.shootCooldown);
             this.shoot(particles);
+
+            /*particles.spawnParticleMass({
+                x: this.x,
+                y: this.y,
+                sender: 'ENEMY',
+            });*/
         }
     }
 
@@ -115,7 +123,8 @@ class Enemy extends Box2D {
     }
 
     public collide(obj: Box2D) {
-        this.hp -= 40;
+        console.log(obj.type);
+        this.hp -= 1;
     }
 
     public get alive(): boolean {

@@ -1,17 +1,15 @@
 
-import Box2D from "./box2d"
 import { width, height, ctx } from "../app";
 import { hero, enemies } from "../game"
+
+import Box2D from "./box2d"
+import { Content } from "./image"
 
 export default class ParticleManager {
     public particles: Particle[];
 
     constructor() {
         this.particles = [];
-        this.spawnParticleMass({
-            x: .5,
-            y: .5,
-        });
     }
 
     public update(): void {
@@ -49,12 +47,12 @@ export default class ParticleManager {
     }
 
     public spawnParticleMass(params: any) {
-        for (let i = 0; i < 50; i++) {
+        for (let i = 0; i < 45; i++) {
             this.emit({
                 x: (params.x || .5) + Math.sin(i) * .1,
                 y: (params.y || .5) + Math.cos(i) * .1,
                 width: 0.01,
-                type: params.type ||'ENEMY',
+                sender: params.sender ||'ENEMY',
                 xSpeed: Math.sin(i) * .005,
                 ySpeed: Math.cos(i) * .005,
             });
@@ -62,6 +60,8 @@ export default class ParticleManager {
     }
 
     private checkParticleCollision(p1: Box2D, p2: Box2D) {
+        if (p1.type != p2.type) return false; // Temporary Line: Enemies don't collide with you.
+
         return ((Math.abs(p1.x - p2.x)) * 2 < (p1.xHitbox + p2.xHitbox)) &&
             ((Math.abs(p1.y - p2.y)) * 2 < (p1.yHitbox + p2.yHitbox))
     }
@@ -87,16 +87,20 @@ export default class ParticleManager {
 class Particle extends Box2D {
 
     public alive: boolean;
+    public content: Content;
 
     constructor(params: any) {
         params.type = params.sender;
         super(params);
+
+        this.content = params.type == 'HERO' ? new Content('bullet-hero') : null;
 
         this.alive = true;
     }
 
     public update(): void {
         super.automateUpdate();
+        this.content?.update();
 
         if (this.x < -.1 || this.x > 1.1)
             this.alive = false;
@@ -106,13 +110,16 @@ class Particle extends Box2D {
     }
 
     public render(): void {
-        ctx.fillStyle = "green";
-        ctx.fillRect(
-            width * this.x - width * this.xHitbox * .5,
-            height * this.y - height * this.yHitbox * .5,
-            width * this.xHitbox,
-            height * this.yHitbox
-        );
+        if (!this.content) {
+            ctx.strokeStyle = "green";
+            ctx.strokeRect(
+                width * this.x - width * this.xHitbox * .5,
+                height * this.y - height * this.yHitbox * .5,
+                width * this.xHitbox,
+                height * this.yHitbox
+            );
+        }
+        this.content?.render(this.x - this.w * .5, this.y - this.h * .5, this.w);
     }
 
     public collide(obj: Box2D): void {

@@ -13,6 +13,7 @@ export default class Overlay {
 
     public render(): void {
         if (state == 0) {
+            // Health
             ctx.fillStyle = "white";
             ctx.fillRect(
                 width * .01 - 5,
@@ -30,6 +31,7 @@ export default class Overlay {
                 );
             }
 
+            // Energy
             ctx.fillStyle = "white";
             ctx.fillRect(
                 width * .99 - 515,
@@ -43,6 +45,32 @@ export default class Overlay {
                     width * .99 - 510,
                     height * .9 + 5,
                     500 * hero.energy / hero.maxEnergy,
+                    40
+                );
+            }
+
+            // Boss
+            let bossHp = 0;
+            let totalBossHp = 0;
+
+            for (let enemy of enemies.enemies) {
+                bossHp += enemy.hp;
+                totalBossHp += enemy.maxHp;
+            }
+
+            ctx.fillStyle = "white";
+            ctx.fillRect(
+                width * .5 - 255,
+                height * .01,
+                510,
+                50
+            );
+            if (bossHp > 0) {
+                ctx.fillStyle = "black";
+                ctx.fillRect(
+                    width * .5 - 250,
+                    height * .01 + 5,
+                    500 * (bossHp / totalBossHp),
                     40
                 );
             }

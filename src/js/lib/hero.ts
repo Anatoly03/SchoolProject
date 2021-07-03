@@ -25,7 +25,7 @@ export default class Hero extends Box2D {
         });
 
         this.canShoot = true;
-        this.shootCooldown = 150;
+        this.shootCooldown = 50;
 
         this.hp = 500;
         this.maxHp = 500;
@@ -91,21 +91,25 @@ export default class Hero extends Box2D {
 
         ctx.fillStyle = "grey";
         ctx.textAlign = "center";
-		ctx.font = "15px Arial";
-		ctx.fillText("HERO", width * this.x, height * this.y);
+        ctx.font = "15px Arial";
+        ctx.fillText("HERO", width * this.x, height * this.y);
     }
 
     // Hero Methods
 
     public shoot(): void {
-        particles.emit({
-            x: this.x,
-            y: this.y,
-            ySpeed: -.01,
-            width: .01,
-            height: .01,
-            sender: "HERO",
-        })
+        for (let i = 0; i < 4; i++) {
+            particles.emit({
+                x: this.x + (i-1.5) * .01,
+                y: this.y,
+                ySpeed: -.02,
+                width: .02,
+                height: .05,
+                xHitbox: .01,
+                yHitbox: .05,
+                sender: "HERO",
+            });
+        }
     }
 
     public collide(obj: Box2D) {
