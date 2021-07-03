@@ -48,22 +48,23 @@ export default class Stage {
     public startLevelAnimation() {
         this.description.showing = true;
 
+        // Animation 1: Appear "Stage 1" Text
         tween.from(this.description).to({
             letters: 1,
-        }).then(() => {
-            tween.from(this.description).to({
-                letters2: 1,
-            }).then(() => {
-                tween.from(this.description).to({
-                    shift: 1,
-                }).then(() => {
-                    //
-                }).execute(1000, {
-                    delay: 1000,
-                });
-            }).execute(1500, {
-                delay: 1000,
-            });
-        }).execute(2000);
+        }).execute(2000)
+        
+        // Animation 2: Appear "Unexpedt Adventure" Title
+        .next(1500, {
+            delay: 1000,
+        }).to({
+            letters2: 1,
+        })
+
+        // Animation 3: Disappear title
+        .next(1000, {
+            delay: 1000,
+        }).to({
+            shift: 1,
+        });
     }
 }

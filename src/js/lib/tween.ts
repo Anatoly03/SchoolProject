@@ -116,4 +116,21 @@ class TweenObject {
         this.isFinished = true;
         if (this.callback) this.callback(this.data);
     }
+
+    public next(ms: number, params?: any): TweenObject {
+        let nextAnimation = new TweenObject(this.data)
+        tweens.push(nextAnimation);
+
+        this.callback = () => {
+            nextAnimation.execute(ms, params);
+        }
+
+        return nextAnimation;
+    }
 }
+
+/*class TweenChildObject extends TweenObject {
+    constructor(params: any) {
+        super(params);
+    }
+}*/
