@@ -1,4 +1,5 @@
 import { Game } from './game';
+import { Tween } from './lib/tween';
 
 export let width: number;
 export let height: number;
@@ -7,9 +8,11 @@ export let ctx: CanvasRenderingContext2D;
 export let keys: { [key: string]: boolean; } = {};
 
 class App {
-	private game: Game;
+	public game: Game;
+	public tween: Tween;
 
 	constructor() {
+		this.tween = new Tween();
 		this.game = new Game();
 	}
 
@@ -23,6 +26,7 @@ class App {
 	public gameLoop(): void {
 		requestAnimationFrame(this.gameLoop.bind(this));
 		this.setVariables();
+		this.tween.update();
 		this.game.update();
 		this.game.render();
 	}
@@ -32,6 +36,10 @@ class App {
 		height = canvas.height = window.innerHeight;
 		ctx = canvas.getContext("2d");
 		ctx.imageSmoothingEnabled = false;
+
+        // Background
+        ctx.fillStyle = "black";
+        ctx.fillRect(0, 0, width, height);
 	}
 
 	private addEventLiteners(): void {
@@ -48,8 +56,11 @@ class App {
 	}
 }
 
+export let app = new App();
+export let game = app.game;
+export let tween = app.tween;
+
 window.onload = () => {
-	let app = new App();
 	app.setup();
 	app.gameLoop();
 }

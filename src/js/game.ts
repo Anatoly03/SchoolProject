@@ -7,8 +7,6 @@ import ParticleManager from "./lib/particle"
 import EnemyManager from "./lib/enemy"
 import Overlay from "./lib/overlay"
 
-export let state: number;
-
 export let stars: Stars;
 export let hero: Hero;
 export let enemies: EnemyManager;
@@ -16,6 +14,9 @@ export let particles: ParticleManager;
 export let overlay: Overlay;
 
 export class Game {
+    public state: number;
+    public isTakingDamage: boolean;
+
     // This is called once before the game loads.
     public setup(): void {
         stars = new Stars();
@@ -27,7 +28,7 @@ export class Game {
     public update(): void {
         stars.update();
 
-        if (state == 0) {
+        if (this.state == 0) {
             hero.update();
             enemies.update();
             particles.update();
@@ -40,20 +41,16 @@ export class Game {
         overlay.update();
 
         if (hero.hp <= 0) {
-            state = 1;
+            this.state = 1;
         }
     }
 
     // This is called at best 60 times every second
     // Use this function for drawing
     public render(): void {
-        // Background
-        ctx.fillStyle = "black";
-        ctx.fillRect(0, 0, width, height);
-
         stars.render();
 
-        if (state == 0) {
+        if (this.state == 0) {
             hero.render();
             enemies.render();
             particles.render();
@@ -75,10 +72,20 @@ export class Game {
     }
 
     private startGame() {
-        state = 0;
+        this.state = 0;
         hero = new Hero();
         enemies = new EnemyManager();
         particles = new ParticleManager();
         overlay = new Overlay();
+        this.isTakingDamage = true;
+    }
+
+    public takeDamage() {
+        if (this.isTakingDamage) {
+            this.isTakingDamage = false;
+            overlay.simulateDamage(() => {
+                this.isTakingDamage = true;
+            })
+        }
     }
 }

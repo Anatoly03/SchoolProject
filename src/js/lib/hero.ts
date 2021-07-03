@@ -1,5 +1,5 @@
 
-import { width, height, ctx, keys } from "../app";
+import { width, height, ctx, keys, game } from "../app";
 import { particles } from "../game"
 import Box2D from "./box2d"
 
@@ -9,7 +9,7 @@ export default class Hero extends Box2D {
     public shootCooldown: number;
 
     public hp: number;
-    public maxHp: number;
+
     public energy: number;
     public maxEnergy: number;
 
@@ -29,8 +29,7 @@ export default class Hero extends Box2D {
         this.canShoot = true;
         this.shootCooldown = 50;
 
-        this.hp = 500;
-        this.maxHp = 500;
+        this.hp = 3;
 
         this.energy = 1000;
         this.maxEnergy = 1000;
@@ -108,6 +107,9 @@ export default class Hero extends Box2D {
     }
 
     public collide(obj: Box2D) {
-        this.hp -= 50;
+        if (game.isTakingDamage) {
+            this.hp -= 1;
+            game.takeDamage();
+        }
     }
 }

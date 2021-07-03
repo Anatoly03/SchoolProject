@@ -12,10 +12,15 @@ const images: { [key: string]: any; } = {
             h: 21,
         }
     },
+    'overlay-damaged': {
+        src: 'assets/overlay-damaged.png', // assets/overlay-damaged.png
+    },
 };
 
 export class Content {
     private img: HTMLImageElement;
+
+    public alpha: number;
 
     private animated: boolean;
     private fps: number;
@@ -33,14 +38,25 @@ export class Content {
 		this.img = new Image();
         this.img.src = data.src;
 
-        this.animated = data.animated;
-        this.frames = data.frames;
-        this.fps = data.fps;
         this.frame = 0;
-        this.incrementFrame = true;
+        this.alpha = 1;
 
-        this.w = data.size.w;
-        this.h = data.size.h;
+        if (data.animated) {
+            this.animated = data.animated;
+            this.frames = data.frames;
+            this.fps = data.fps;
+            this.incrementFrame = true;
+        } else {
+            this.animated = false;
+        }
+
+        if (data.size) {
+            this.w = data.size.w;
+            this.h = data.size.h;
+        } else {
+            this.w = this.img.width;
+            this.h = this.img.height;
+        }
     }
 
     public update(): void {
@@ -52,12 +68,18 @@ export class Content {
         }
     }
 
-    public render(x: number, y: number, w: number): void {
+    public render(x: number, y: number, w: number, h?:number): void {
+        ctx.globalAlpha = this.alpha;
+        
         ctx.drawImage(this.img,
             // Image Part
             this.frame * this.w, 0, this.w, this.h,
             // Position
-            Math.floor(width * x), Math.floor(height * y), width * w, width * w
+            Math.floor(width * x),
+            Math.floor(height * y),
+            Math.floor(width * w),
+            Math.floor(height * (h || w))
         );
+        ctx.globalAlpha = 1;
     }
 }

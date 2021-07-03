@@ -1,27 +1,32 @@
 
-import { width, height, ctx } from "../app";
+import { width, height, ctx, game, tween } from "../app";
 import { hero, enemies } from "../game";
-
-import { state } from "../game";
+import { Content } from "./image"
 
 export default class Overlay {
+    private overlayDamaged: Content;
+
     constructor() {
+        this.overlayDamaged = new Content('overlay-damaged');
+        this.overlayDamaged.alpha = 0;
     }
 
     public update(): void {
     }
 
     public render(): void {
-        if (state == 0) {
+        if (game.state == 0) {
             // Health
             if (hero.hp > 0) {
                 ctx.fillStyle = "rgb(50, 0, 0)";
-                ctx.fillRect(
-                    0,
-                    0,
-                    30,
-                    height * .5 * hero.hp / hero.maxHp,
-                );
+                for (let i = 0; i < hero.hp; i++) {
+                    ctx.fillRect(
+                        5,
+                        5 + 55 * i,
+                        50,
+                        50,
+                    );
+                }
             }
 
             // Energy
@@ -60,6 +65,16 @@ export default class Overlay {
                     40
                 );
             }
+
+            //console.log(this.tweenTest);
+            /*ctx.strokeStyle = `rgb(${Math.floor(this.tweenTest.a)}, 0, 0)`;
+            ctx.strokeRect(
+                50,
+                50,
+                width - 100,
+                height - 100,
+            );*/
+            this.overlayDamaged.render(0, 0, 1, 1);
         } else {
             let size = Math.floor(.2 * height);
             ctx.textAlign = 'center';
@@ -72,5 +87,21 @@ export default class Overlay {
             ctx.font = Math.floor(size / 3) + "px Arial";
             ctx.fillText("You suck at this game! LMAO, noob!", width * .5, height * .75);
         }
+    }
+
+    public simulateDamage(callback: () => void) {
+        tween.from(this.overlayDamaged).to({
+            alpha: 1,
+        }).then(() => {
+
+            tween.from(this.overlayDamaged).to({
+                alpha: 0,
+            }).then(() => {
+                callback();
+            }).execute(500, {
+                delay: 2000
+            });
+
+        }).execute(100);
     }
 }
