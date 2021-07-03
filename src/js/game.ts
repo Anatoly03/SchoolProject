@@ -1,5 +1,5 @@
 
-import { width, height, ctx, keys } from "./app";
+import { width, height, ctx, keys, game } from "./app";
 
 import Stars from "./lib/stars"
 import Hero from "./lib/hero"
@@ -67,7 +67,7 @@ export class Game {
 
             ctx.fillStyle = "green";
             ctx.font = size + "px Arial";
-            ctx.fillText("" + particles.length, width * .9, 20 + size * 2);
+            ctx.fillText("" + (particles.enemyParticles.length + particles.heroParticles.length), width * .9, 20 + size * 2);
         }
     }
 
@@ -83,6 +83,7 @@ export class Game {
     public takeDamage() {
         if (this.isTakingDamage) {
             this.isTakingDamage = false;
+            particles.despawnAllEnemyParticles();
             overlay.simulateDamage(() => {
                 this.isTakingDamage = true;
             })

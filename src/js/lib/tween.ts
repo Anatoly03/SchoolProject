@@ -34,7 +34,7 @@ class TweenObject {
     public isFinished: boolean;
 
     private data: any;
-    private callback: () => void;
+    private callback: (params: any) => void;
 
     private originalState: any;
     private finishedState: any;
@@ -114,6 +114,6 @@ class TweenObject {
     public finish() {
         this.animating = false;
         this.isFinished = true;
-        if (this.callback) this.callback();
+        if (this.callback) this.callback(this.data);
     }
 }

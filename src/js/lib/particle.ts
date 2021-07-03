@@ -1,28 +1,35 @@
 
-import { width, height, ctx } from "../app";
+import { width, height, ctx, tween } from "../app";
 import { hero, enemies } from "../game"
 
 import Box2D from "./box2d"
 import { Content } from "./image"
 
 export default class ParticleManager {
-    public particles: Particle[];
+    public enemyParticles: Particle[];
+    public heroParticles: Particle[];
+
+    public updateEnemyParticles = true;
 
     constructor() {
-        this.particles = [];
+        this.enemyParticles = [];
+        this.heroParticles = [];
     }
 
     public update(): void {
-        for (let i = 0; i < this.particles.length; i++) {
-            this.particles[i].update();
+        // Bullets the hero shoots
+        for (let i = 0; i < this.heroParticles.length; i++) {
+            this.heroParticles[i].update();
+        }
 
-            // Check collision
-            for (let j = i + 1; j < this.particles.length; j++) {
-                if (this.particles[i].type != this.particles[j].type) // Your particles don't collide with your team.
-                    if (this.checkParticleCollision(this.particles[i], this.particles[j])) {
-                        this.particles[i].collide(this.particles[j]);
-                        this.particles[j].collide(this.particles[i]);
-                    }
+        // Bullets the enemy shoots
+        if (this.updateEnemyParticles) {
+            for (let i = 0; i < this.enemyParticles.length; i++) {
+                this.enemyParticles[i].update();
+
+                for (let j = 0; j < this.heroParticles.length; j++) {
+                    this.checkParticleCollision(this.enemyParticles[i], this.heroParticles[j]);
+                }
             }
         }
 
@@ -31,19 +38,30 @@ export default class ParticleManager {
             this.checkCollision(enemies.enemies[i]);
         }
 
-        this.particles = this.particles.filter(p => p.alive);
+        this.heroParticles = this.heroParticles.filter(p => p.alive);
+        this.enemyParticles = this.enemyParticles.filter(p => p.alive);
     }
 
     public render(): void {
-        for (let i = 0; i < this.particles.length; i++) {
-            this.particles[i].render();
+        for (let i = 0; i < this.heroParticles.length; i++) {
+            this.heroParticles[i].render();
+        }
+
+        for (let i = 0; i < this.enemyParticles.length; i++) {
+            this.enemyParticles[i].render();
         }
     }
 
     public emit(params: any) {
-        this.particles.push(
-            new Particle(params)
-        )
+        if (params.sender == 'HERO') {
+            this.heroParticles.push(
+                new Particle(params)
+            )
+        } else if (params.sender == 'ENEMY') {
+            this.enemyParticles.push(
+                new Particle(params)
+            )
+        }
     }
 
     public spawnParticleMass(params: any) {
@@ -62,15 +80,33 @@ export default class ParticleManager {
     private checkParticleCollision(p1: Box2D, p2: Box2D) {
         //if (p1.type != p2.type) return false; // Temporary Line: Enemies don't collide with you.
 
-        return ((Math.abs(p1.x - p2.x)) * 2 < (p1.xHitbox + p2.xHitbox)) &&
-            ((Math.abs(p1.y - p2.y)) * 2 < (p1.yHitbox + p2.yHitbox))
+        let colliding = ((Math.abs(p1.x - p2.x)) * 2 < (p1.xHitbox + p2.xHitbox)) &&
+            ((Math.abs(p1.y - p2.y)) * 2 < (p1.yHitbox + p2.yHitbox));
+
+        if (colliding) {
+            p1.collide(p2);
+            p2.collide(p1);
+        }
     }
 
     public checkCollision(obj: Box2D) {
-        for (let i = 0; i < this.particles.length; i++) {
-            let particle: Particle = this.particles[i];
+        if (!obj.canCollide) return;
 
-            if (particle.type != obj.type)
+        for (let i = 0; i < this.heroParticles.length; i++) {
+            let particle: Particle = this.heroParticles[i];
+
+            if (particle.type != obj.type && particle.canCollide)
+                if (((Math.abs(particle.x - obj.x)) * 2 < (particle.xHitbox + obj.xHitbox)) &&
+                    ((Math.abs(particle.y - obj.y)) * 2 < (particle.yHitbox + obj.yHitbox))) {
+                    particle.collide(obj);
+                    obj.collide(particle);
+                }
+        }
+
+        for (let i = 0; i < this.enemyParticles.length; i++) {
+            let particle: Particle = this.enemyParticles[i];
+
+            if (particle.type != obj.type && particle.canCollide)
                 if (((Math.abs(particle.x - obj.x)) * 2 < (particle.xHitbox + obj.xHitbox)) &&
                     ((Math.abs(particle.y - obj.y)) * 2 < (particle.yHitbox + obj.yHitbox))) {
                     particle.collide(obj);
@@ -79,8 +115,24 @@ export default class ParticleManager {
         }
     }
 
-    public get length() {
-        return this.particles.length;
+
+    public despawnAllEnemyParticles() {
+        this.updateEnemyParticles = false;
+
+        for (let i = 0; i < this.enemyParticles.length; i++) {
+            let particle: Particle = this.enemyParticles[i];
+            particle.canCollide = false;
+
+            tween.from(particle).to({
+                x: hero.x,
+                y: hero.y
+            }).then(() => {
+                particle.alive = false;
+                setTimeout(() => {
+                    this.updateEnemyParticles = true;
+                }, 2000)
+            }).execute(500);
+        }
     }
 }
 

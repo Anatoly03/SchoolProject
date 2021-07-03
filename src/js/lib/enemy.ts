@@ -86,7 +86,7 @@ class Enemy extends Box2D {
     public update(): void {
         this.x = this.originalX + Math.sin(Date.now() * .005) * .08 + Math.cos(Date.now() * .005 * Math.PI) * .03;
 
-        if (this.canShoot && this.shootCooldown != 0) {
+        if (this.canShoot && this.shootCooldown != 0 && particles.updateEnemyParticles) {
             this.canShoot = false;
             setTimeout(() => this.canShoot = true, this.shootCooldown);
             //this.shoot(particles);

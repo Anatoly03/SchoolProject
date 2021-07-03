@@ -5,6 +5,7 @@ import { width, height, ctx } from "../app";
 export default class Box2D {
 
     public type: string; // type of physical object: "HERO" | "NEUTRAL" | "ENEMY"
+    public canCollide: boolean; // absolute pixel
 
     public x: number; // percentage of game screen
     public y: number; // percentage of game screen
@@ -20,6 +21,7 @@ export default class Box2D {
 
     constructor(params: any) {
         this.type = params.type || "NEUTRAL";
+        this.canCollide = true;
 
         this.x = params.x || 0;
         this.y = params.y || 0;
