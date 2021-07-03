@@ -89,13 +89,13 @@ class Enemy extends Box2D {
         if (this.canShoot && this.shootCooldown != 0) {
             this.canShoot = false;
             setTimeout(() => this.canShoot = true, this.shootCooldown);
-            this.shoot(particles);
+            //this.shoot(particles);
 
-            /*particles.spawnParticleMass({
+            particles.spawnParticleMass({
                 x: this.x,
                 y: this.y,
                 sender: 'ENEMY',
-            });*/
+            });
         }
     }
 
@@ -123,7 +123,7 @@ class Enemy extends Box2D {
     }
 
     public collide(obj: Box2D) {
-        console.log(obj.type);
+        //console.log(obj.type);
         this.hp -= 1;
     }
 

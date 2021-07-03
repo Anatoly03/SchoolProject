@@ -21,7 +21,9 @@ export default class Hero extends Box2D {
             xSpeed: .005,
             ySpeed: .005,
             width: .1,
-            height: .1
+            height: .1,
+            xHitbox: .01,
+            yHitbox: .01,
         });
 
         this.canShoot = true;
@@ -30,8 +32,8 @@ export default class Hero extends Box2D {
         this.hp = 500;
         this.maxHp = 500;
 
-        this.energy = 100;
-        this.maxEnergy = 100;
+        this.energy = 1000;
+        this.maxEnergy = 1000;
     }
 
     public update(): void {
@@ -39,22 +41,22 @@ export default class Hero extends Box2D {
 
         if (keys["arrowright"] || keys["d"]) {
             this.x += this.xSpeed;
-            this.x = Math.min(.9, this.x);
+            this.x = Math.min(.99, this.x);
         }
 
         if (keys["arrowleft"] || keys["a"]) {
             this.x -= this.xSpeed;
-            this.x = Math.max(.1, this.x);
+            this.x = Math.max(.01, this.x);
         }
 
         if (keys["arrowup"] || keys["w"]) {
             this.y -= this.ySpeed;
-            this.y = Math.max(.1, this.y);
+            this.y = Math.max(.01, this.y);
         }
 
         if (keys["arrowdown"] || keys["s"]) {
             this.y += this.ySpeed;
-            this.y = Math.min(.9, this.y);
+            this.y = Math.min(.99, this.y);
         }
 
         if ((keys[" "] || keys["x"]) && this.canShoot && this.energy > 5) {
@@ -70,15 +72,14 @@ export default class Hero extends Box2D {
     }
 
     public render(): void {
-        ctx.fillStyle = "white";
-        ctx.fillRect(
+        ctx.strokeStyle = "white";
+        ctx.strokeRect(
             width * this.x - width * this.w * .5,
             height * this.y - height * this.h * .5,
             width * this.w,
             height * this.h
         );
 
-        /*
         ctx.strokeStyle = "red";
         ctx.lineWidth = 2;
         ctx.strokeRect(
@@ -87,12 +88,6 @@ export default class Hero extends Box2D {
             width * this.xHitbox,
             height * this.yHitbox
         );
-        */
-
-        ctx.fillStyle = "grey";
-        ctx.textAlign = "center";
-        ctx.font = "15px Arial";
-        ctx.fillText("HERO", width * this.x, height * this.y);
     }
 
     // Hero Methods

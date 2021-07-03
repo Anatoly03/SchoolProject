@@ -32,7 +32,7 @@ export class Game {
             enemies.update();
             particles.update();
         } else {
-            if (keys["enter"] || keys[" "]) {
+            if (keys["enter"]) {
                 this.startGame();
             }
         }

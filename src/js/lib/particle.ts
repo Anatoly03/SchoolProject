@@ -18,7 +18,7 @@ export default class ParticleManager {
 
             // Check collision
             for (let j = i + 1; j < this.particles.length; j++) {
-                if (this.particles[i].type != this.particles[j].type) // Your particles don't collide with you.
+                if (this.particles[i].type != this.particles[j].type) // Your particles don't collide with your team.
                     if (this.checkParticleCollision(this.particles[i], this.particles[j])) {
                         this.particles[i].collide(this.particles[j]);
                         this.particles[j].collide(this.particles[i]);
@@ -52,7 +52,7 @@ export default class ParticleManager {
                 x: (params.x || .5) + Math.sin(i) * .1,
                 y: (params.y || .5) + Math.cos(i) * .1,
                 width: 0.01,
-                sender: params.sender ||'ENEMY',
+                sender: params.sender || 'ENEMY',
                 xSpeed: Math.sin(i) * .005,
                 ySpeed: Math.cos(i) * .005,
             });
@@ -60,7 +60,7 @@ export default class ParticleManager {
     }
 
     private checkParticleCollision(p1: Box2D, p2: Box2D) {
-        if (p1.type != p2.type) return false; // Temporary Line: Enemies don't collide with you.
+        //if (p1.type != p2.type) return false; // Temporary Line: Enemies don't collide with you.
 
         return ((Math.abs(p1.x - p2.x)) * 2 < (p1.xHitbox + p2.xHitbox)) &&
             ((Math.abs(p1.y - p2.y)) * 2 < (p1.yHitbox + p2.yHitbox))
@@ -123,6 +123,7 @@ class Particle extends Box2D {
     }
 
     public collide(obj: Box2D): void {
+        //console.log(obj);
         this.alive = false;
     }
 }

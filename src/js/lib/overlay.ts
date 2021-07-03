@@ -14,38 +14,24 @@ export default class Overlay {
     public render(): void {
         if (state == 0) {
             // Health
-            ctx.fillStyle = "white";
-            ctx.fillRect(
-                width * .01 - 5,
-                height * .9,
-                510,
-                50
-            );
             if (hero.hp > 0) {
-                ctx.fillStyle = "red";
+                ctx.fillStyle = "rgb(50, 0, 0)";
                 ctx.fillRect(
-                    width * .01,
-                    height * .9 + 5,
-                    500 * hero.hp / hero.maxHp,
-                    40
+                    0,
+                    0,
+                    30,
+                    height * .5 * hero.hp / hero.maxHp,
                 );
             }
 
             // Energy
-            ctx.fillStyle = "white";
-            ctx.fillRect(
-                width * .99 - 515,
-                height * .9,
-                510,
-                50
-            );
             if (hero.energy > 0) {
-                ctx.fillStyle = "blue";
+                ctx.fillStyle = "rgb(0, 0, 50)";
                 ctx.fillRect(
-                    width * .99 - 510,
-                    height * .9 + 5,
-                    500 * hero.energy / hero.maxEnergy,
-                    40
+                    0,
+                    height * (1 - .5 * hero.energy / hero.maxEnergy),
+                    30,
+                    height * .5 * hero.energy / hero.maxEnergy,
                 );
             }
 
