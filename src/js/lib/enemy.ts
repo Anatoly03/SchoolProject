@@ -77,7 +77,7 @@ export class Enemy extends Box2D {
         this.hp = params.hp || 5;
         this.maxHp = params.maxHp || this.hp;
         this.canShoot = true;
-        this.shootCooldown = 150;
+        this.shootCooldown = 300; // 150;
         this.updateEnemy = params.update == undefined ? true : params.update;
 
         this.originalX = params.x;
@@ -92,13 +92,14 @@ export class Enemy extends Box2D {
             if (this.canShoot && this.shootCooldown != 0 && particles.updateEnemyParticles) {
                 this.canShoot = false;
                 setTimeout(() => this.canShoot = true, this.shootCooldown);
-                this.shoot();
+                //this.shoot();
 
-                /*particles.spawnParticleMass({
+                particles.spawnParticleMass({
                     x: this.x,
                     y: this.y,
                     sender: 'ENEMY',
-                });*/
+                    amount: 12,
+                });
             }
         }
     }
@@ -120,7 +121,7 @@ export class Enemy extends Box2D {
             x: this.x,
             y: this.y,
             ySpeed: .01,
-            xSpeed: - Math.sign(this.x - .5) * .01,
+            xSpeed: - (this.x - .5) * .02,
             width: .01,
             height: .01,
             sender: "ENEMY",

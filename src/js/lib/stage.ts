@@ -116,7 +116,7 @@ export default class Stage {
 
             tween.from(e).to({
                 y: .3 - i/6 * .2,
-            }).execute(1000, {
+            }).execute(500, {
                 delay: i * 500,
                 tweening: TWEENING.BEZIER,
             });
@@ -136,7 +136,7 @@ export default class Stage {
 
             tween.from(e).to({
                 y: .3 - i/6 * .2,
-            }).execute(1000, {
+            }).execute(500, {
                 delay: i * 500,
                 tweening: TWEENING.BEZIER,
             });
@@ -145,7 +145,7 @@ export default class Stage {
         for (let i = 0; i < 6; i++) {
             let k = spawnedEnemies.push(enemies.add({
                 x: .5 - (i%2 - 0.5) * .1,
-                y: -.1 - Math.ceil(i/3) * .2,
+                y: -.1 - Math.floor(i/2) * .02 / 3,
                 hp: 2,
                 width: .025,
                 height: .025,
@@ -155,8 +155,8 @@ export default class Stage {
             let e = spawnedEnemies[k - 1];
 
             tween.from(e).to({
-                y: .3 - i/6 * .2,
-            }).execute(1000, {
+                y: .3 - Math.floor(i/2) * .2 / 3,
+            }).execute(500, {
                 delay: i * 500,
                 tweening: TWEENING.BEZIER,
             });

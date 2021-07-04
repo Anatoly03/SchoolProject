@@ -66,14 +66,17 @@ export default class ParticleManager {
     }
 
     public spawnParticleMass(params: any) {
-        for (let i = 0; i < 45; i++) {
+        let k = params.amount || 45;
+        let j = params.offsetCircle || 0;
+
+        for (let i = 0; i < k; i++) {
             this.emit({
-                x: (params.x || .5) + Math.sin(i) * .1,
-                y: (params.y || .5) + Math.cos(i) * .1,
-                width: 0.01,
+                x: params.x || .5,
+                y: params.y || .5,
+                width: params.width || 0.01,
                 sender: params.sender || 'ENEMY',
-                xSpeed: Math.sin(i) * .005,
-                ySpeed: Math.cos(i) * .005,
+                xSpeed: Math.sin(2 * i * Math.PI / k) * .005,
+                ySpeed: Math.cos(2 * i * Math.PI / k + j * Math.PI) * .005,
             });
         }
     }
