@@ -38,25 +38,14 @@ export default class Hero extends Box2D {
     public update(): void {
         // console.log(keys);
 
-        if (keys["arrowright"] || keys["d"]) {
-            this.x += this.xSpeed;
-            this.x = Math.min(.99, this.x);
-        }
+        this.x += this.xMovingDirection * this.xSpeed;
+        this.y += this.yMovingDirection * this.ySpeed;
 
-        if (keys["arrowleft"] || keys["a"]) {
-            this.x -= this.xSpeed;
-            this.x = Math.max(.01, this.x);
-        }
-
-        if (keys["arrowup"] || keys["w"]) {
-            this.y -= this.ySpeed;
-            this.y = Math.max(.01, this.y);
-        }
-
-        if (keys["arrowdown"] || keys["s"]) {
-            this.y += this.ySpeed;
-            this.y = Math.min(.99, this.y);
-        }
+        // Border collision logic
+        this.x = Math.min(.99, this.x);
+        this.x = Math.max(.01, this.x);
+        this.y = Math.max(.01, this.y);
+        this.y = Math.min(.99, this.y);
 
         if ((keys[" "]) && this.canShoot) {
             this.canShoot = false;
@@ -96,6 +85,7 @@ export default class Hero extends Box2D {
                 x: this.x + i * .01,
                 y: this.y + Math.abs(i) * .005,
                 ySpeed: -.02,
+                xSpeed: this.xMovingDirection * .015,
                 width: .02,
                 height: .05,
                 xHitbox: .01,
@@ -110,5 +100,23 @@ export default class Hero extends Box2D {
             this.hp -= 1;
             game.takeDamage();
         }
+    }
+
+    private get xMovingDirection() {
+        let dir = 0;
+
+        if (keys["arrowright"] || keys["d"]) dir++;
+        if (keys["arrowleft"] || keys["a"]) dir--;
+
+        return dir;
+    }
+
+    private get yMovingDirection() {
+        let dir = 0;
+
+        if (keys["arrowup"] || keys["w"]) dir--;
+        if (keys["arrowdown"] || keys["s"]) dir++;
+
+        return dir;
     }
 }

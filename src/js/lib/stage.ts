@@ -1,6 +1,8 @@
 
 import { width, height, ctx, keys, game, tween } from "../app";
 import { enemies } from "../game";
+import { TWEENING } from "./tween"
+import { Enemy } from "./enemy"
 
 let stages = [
     {
@@ -17,6 +19,14 @@ let stages = [
 export default class Stage {
     private level = 0;
     private round = 0;
+
+    /*
+
+    0: Stage Title Text
+    1: Round Start: Bosses Appearing
+    2: Mid game: FIGHT
+
+    */
     private gameState = 0;
 
     private description = {
@@ -90,6 +100,74 @@ export default class Stage {
         let round = stages[this.level].rounds[this.round];
         this.gameState = 1;
 
+        let spawnedEnemies: Enemy[] = [];
+
+        for (let i = 0; i < 6; i++) {
+            let k = spawnedEnemies.push(enemies.add({
+                x: .75 + i%2 * .1,
+                y: -.1 - i/6 * .2,
+                hp: 10,
+                width: .025,
+                height: .025,
+                update: false,
+            }));
+
+            let e = spawnedEnemies[k - 1];
+
+            tween.from(e).to({
+                y: .3 - i/6 * .2,
+            }).execute(1000, {
+                delay: i * 500,
+                tweening: TWEENING.BEZIER,
+            });
+        }
+
+        for (let i = 0; i < 6; i++) {
+            let k = spawnedEnemies.push(enemies.add({
+                x: .25 - i%2 * .1,
+                y: -.1 - i/6 * .2,
+                hp: 2,
+                width: .025,
+                height: .025,
+                update: false,
+            }));
+
+            let e = spawnedEnemies[k - 1];
+
+            tween.from(e).to({
+                y: .3 - i/6 * .2,
+            }).execute(1000, {
+                delay: i * 500,
+                tweening: TWEENING.BEZIER,
+            });
+        }
+
+        for (let i = 0; i < 6; i++) {
+            let k = spawnedEnemies.push(enemies.add({
+                x: .5 - (i%2 - 0.5) * .1,
+                y: -.1 - Math.ceil(i/3) * .2,
+                hp: 2,
+                width: .025,
+                height: .025,
+                update: false,
+            }));
+
+            let e = spawnedEnemies[k - 1];
+
+            tween.from(e).to({
+                y: .3 - i/6 * .2,
+            }).execute(1000, {
+                delay: i * 500,
+                tweening: TWEENING.BEZIER,
+            });
+        }
+
+        tween.execute(4000).then(() => {
+            for (let i = 0; i < spawnedEnemies.length; i++) {
+                this.gameState = 2;
+                spawnedEnemies[i].updateEnemy = true;
+            }
+        })
     }
 
     private nextRound() {
@@ -116,6 +194,10 @@ export default class Stage {
 
         let level = stages[this.level];
 
+    }
+
+    public get inFight () {
+        return this.gameState == 2
     }
 
     /*

@@ -1,5 +1,5 @@
 
-import { width, height, ctx, tween } from "../app";
+import { width, height, ctx, tween, game } from "../app";
 import { hero, enemies } from "../game"
 
 import Box2D from "./box2d"
@@ -27,9 +27,10 @@ export default class ParticleManager {
             for (let i = 0; i < this.enemyParticles.length; i++) {
                 this.enemyParticles[i].update();
 
-                for (let j = 0; j < this.heroParticles.length; j++) {
+                // Check for collisions with hero's particles
+                /*for (let j = 0; j < this.heroParticles.length; j++) {
                     this.checkParticleCollision(this.enemyParticles[i], this.heroParticles[j]);
-                }
+                }*/
             }
         }
 
@@ -91,6 +92,7 @@ export default class ParticleManager {
 
     public checkCollision(obj: Box2D) {
         if (!obj.canCollide) return;
+        if (game.stage.inFight && game.isTakingDamage)
 
         for (let i = 0; i < this.heroParticles.length; i++) {
             let particle: Particle = this.heroParticles[i];

@@ -16,13 +16,12 @@ export let overlay: Overlay;
 export let state: number;
 
 export class Game {
-    private stage: Stage;
+    public stage: Stage;
     public isTakingDamage: boolean;
 
     // This is called once before the game loads.
     public setup(): void {
         stars = new Stars();
-        this.stage = new Stage();
         this.startGame();
     }
 
@@ -81,6 +80,7 @@ export class Game {
         enemies = new EnemyManager();
         particles = new ParticleManager();
         overlay = new Overlay();
+        this.stage = new Stage();
         this.isTakingDamage = true;
     }
 

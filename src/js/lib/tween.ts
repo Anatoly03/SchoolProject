@@ -18,6 +18,11 @@ export class Tween {
         tweens.push(tween);
         return tween;
     }
+
+    public execute(ms: number, params?: any): TweenObject {
+        let tween = this.from({}).to({}).execute(ms, params)
+        return tween;
+    }
 }
 
 /*
@@ -28,6 +33,8 @@ type TweeningType = (start: number, end: number, percentage: number) => number;
 
 export let TWEENING: { [key: string]: TweeningType} = {
     LINEAR: (s, e, p) => s + (e - s) * p,
+    EASE_IN: (s, e, p) => s + (e - s) * p * p,
+    BEZIER: (s, e, p) => s + (e - s) * p * p * (3 - 2 * p),
 }
 
 class TweenObject {
