@@ -45,10 +45,10 @@ export default class EnemyManager {
         }
     }
 
-    public add(params: any) {
-        this.enemies.push(
-            new Enemy(params)
-        )
+    public add(params: any): Enemy {
+        let e = new Enemy(params);
+        this.enemies.push(e);
+        return e;
     }
 
     public get length() {

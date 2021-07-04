@@ -4,6 +4,7 @@ import { width, height, ctx } from "../app";
 const images: { [key: string]: any; } = {
     'bullet-hero': {
         src: 'assets/bullet-hero.png',
+        alpha: 0.1,
         animated: true,
         frames: 4,
         fps: 1,
@@ -13,6 +14,7 @@ const images: { [key: string]: any; } = {
         }
     },
     'overlay-damaged': {
+        alpha: 1,
         src: 'assets/overlay-damaged.png', // assets/overlay-damaged.png
     },
 };
@@ -50,6 +52,8 @@ export class Content {
             this.animated = false;
         }
 
+        if (data.alpha) this.alpha = data.alpha;
+
         if (data.size) {
             this.w = data.size.w;
             this.h = data.size.h;
@@ -70,7 +74,6 @@ export class Content {
 
     public render(x: number, y: number, w: number, h?:number): void {
         ctx.globalAlpha = this.alpha;
-        
         ctx.drawImage(this.img,
             // Image Part
             this.frame * this.w, 0, this.w, this.h,

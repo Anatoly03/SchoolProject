@@ -5,13 +5,19 @@ import { enemies } from "../game";
 let stages = [
     {
         name: "Stage 1",
-        title: "Unexpected Adventure"
+        title: "Unexpected Adventure",
+        rounds: [
+            () => {
+                //
+            },
+        ],
     }
 ]
 
 export default class Stage {
     private level = 0;
-    private isBossAppearing = true;
+    private round = 0;
+    private gameState = 0;
 
     private description = {
         showing: false,
@@ -22,6 +28,12 @@ export default class Stage {
 
     constructor() {
         this.startLevelAnimation();
+    }
+
+    public update() {
+        if (this.gameState == 1) {
+            //
+        }
     }
 
     public render() {
@@ -38,33 +50,87 @@ export default class Stage {
             ctx.fillStyle = "yellow";
             ctx.font = size + "px Zen Tokyo Zoo";
             let k = ctx.measureText(stages[this.level].title)
-            ctx.fillText(stages[this.level].title.substring(0, Math.ceil(stages[this.level].title.length * this.description.letters2)), (width - k.width) *.5 + this.description.shift * width * 2, height * .6);
+            ctx.fillText(stages[this.level].title.substring(0, Math.ceil(stages[this.level].title.length * this.description.letters2)), (width - k.width) * .5 + this.description.shift * width * 2, height * .6);
 
             ctx.fillStyle = `rgb(255, 255, 255, ${.9 - this.description.shift})`;
             ctx.fillRect((width - k.width) * .5, height * .6 + size * .3, k.width * this.description.letters, 5);
         }
     }
 
-    public startLevelAnimation() {
+    private startLevelAnimation() {
         this.description.showing = true;
+        this.gameState = 0;
 
         // Animation 1: Appear "Stage 1" Text
         tween.from(this.description).to({
             letters: 1,
         }).execute(2000)
-        
-        // Animation 2: Appear "Unexpedt Adventure" Title
-        .next(1500, {
-            delay: 1000,
-        }).to({
-            letters2: 1,
-        })
 
-        // Animation 3: Disappear title
-        .next(1000, {
-            delay: 1000,
-        }).to({
-            shift: 1,
-        });
+            // Animation 2: Appear "Unexpedt Adventure" Title
+            .next(1500, {
+                delay: 1000,
+            }).to({
+                letters2: 1,
+            })
+
+            // Animation 3: Disappear title
+            .next(500, {
+                delay: 1000,
+            }).to({
+                shift: 1,
+            })
+
+            // Start Level
+            .then(() => {
+                this.executeLevel();
+            })
     }
+
+    private executeLevel() {
+        let round = stages[this.level].rounds[this.round];
+        this.gameState = 1;
+
+    }
+
+    private nextRound() {
+        if (this.round + 1 >= stages[this.level].rounds.length) {
+            // Next Level instead
+            return;
+        }
+
+        this.round ++;
+
+        let round = stages[this.level].rounds[this.round];
+        this.gameState = 1;
+
+    }
+
+    private nextLevel() {
+        if (this.level + 1 >= stages.length) {
+            // Finished with the game
+            return;
+        }
+        
+        this.level ++;
+        this.round = 0;
+
+        let level = stages[this.level];
+
+    }
+
+    /*
+
+    ** GAMEPLAY STUFF **
+
+    */
+
+    private spawn(type: string, params?: any) {
+        switch (type) {
+            case "mob_group_1": MobGroup1(params || {}); break;
+        }
+    }
+}
+
+function MobGroup1(params: any) {
+
 }
