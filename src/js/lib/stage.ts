@@ -73,6 +73,9 @@ export default class Stage {
             shift: 0,
         };
 
+        if (particles.enemyParticles.length > 0)
+            particles.despawnAllEnemyParticles();
+
         // Animation 1: Appear "Stage 1" Text
         tween.from(this.description).to({
             letters: 1,
@@ -106,9 +109,8 @@ export default class Stage {
 
     private executeLevel() {
         this.gameState = 1;
-
-        //let level = stages[this.level];
         this.round = 0;
+
         this.startLevelAnimation();
     }
 
@@ -137,8 +139,8 @@ export default class Stage {
             // Finished with the game
             return;
         }
-        
-        this.level ++;
+
+        this.level++;
         this.startLevelAnimation();
     }
 
@@ -148,7 +150,7 @@ export default class Stage {
             return;
         }
 
-        this.round ++;
+        this.round++;
         this.executeRound();
     }
 
@@ -158,7 +160,7 @@ export default class Stage {
 
     */
 
-    public get inFight () {
+    public get inFight() {
         return this.gameState == 2
     }
 }
