@@ -4,24 +4,46 @@ import { particles } from "../game";
 import { Enemy } from "./enemy";
 
 export class AIBehavior {
-    public parent: Enemy;
-
     public canShoot: boolean;
     public shootCooldown: number;
 
-    constructor(enemyReference: Enemy, params?: any) {
-        this.parent = enemyReference;
+    public data: any;
+    public loop = (arg0: Enemy, arg1: AIBehavior) => {};
 
+    constructor(params?: any) {
         this.canShoot = true;
         this.shootCooldown = 300; // 150;
 
         if (params) {
-            //
+            this.data = {
+                canShoot: true,
+                shootCooldown: 300,
+            }
+
+            this.loop = (parent, ai) => {
+                if (ai.data.canShoot && particles.updateEnemyParticles) {
+                    ai.data.canShoot = false;
+                    setTimeout(() => ai.data.canShoot = true, ai.data.shootCooldown);
+
+                    particles.spawnParticleMass({
+                        x: parent.x,
+                        y: parent.y,
+                        sender: 'ENEMY',
+                        amount: 12,
+                        offsetCircle: 1 / 12,
+                    });
+                }
+            }
+        } else {
+            this.data = {}
+            this.loop = (parent, ai) => {}
         }
     }
 
-    public update(): void {
-        if (this.canShoot && this.shootCooldown != 0 && particles.updateEnemyParticles) {
+    public update(parent: Enemy): void {
+        this.loop(parent, this);
+
+        /*if (this.canShoot && this.shootCooldown != 0 && particles.updateEnemyParticles) {
             this.canShoot = false;
             setTimeout(() => this.canShoot = true, this.shootCooldown);
 
@@ -35,15 +57,15 @@ export class AIBehavior {
                 height: .01,
                 sender: "ENEMY",
             })
-            */
+            * /
 
             particles.spawnParticleMass({
-                x: this.parent.x,
-                y: this.parent.y,
+                x: parent.x,
+                y: parent.y,
                 sender: 'ENEMY',
                 amount: 12,
                 offsetCircle: 1 / 12,
             });
-        }
+        }*/
     }
 }

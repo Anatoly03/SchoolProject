@@ -123,6 +123,7 @@ export default class Stage {
         }
 
         let round = stages[this.level].rounds[this.round];
+        
         this.gameState = 1;
 
         round(next);
@@ -141,6 +142,7 @@ export default class Stage {
         }
 
         this.level++;
+        particles.updateEnemyParticles = false;
         this.startLevelAnimation();
     }
 

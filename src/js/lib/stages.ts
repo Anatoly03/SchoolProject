@@ -1,10 +1,11 @@
 
 import { width, height, ctx, keys, game, tween } from "../app";
-import { enemies } from "../game";
+import { enemies, particles } from "../game";
 import { TWEENING } from "./tween"
 import { Enemy } from "./enemy"
 
 import Stage from "./stage"
+import { AIBehavior } from "./ai";
 
 export let stages = [
     /*
@@ -31,7 +32,10 @@ export let stages = [
                         hp: 2,
                         width: .025,
                         height: .025,
-                        update: false,
+
+                        ai: new AIBehavior({
+                            //
+                        })
                     }));
 
                     let e = spawnedEnemies[k - 1];
@@ -45,8 +49,8 @@ export let stages = [
                 }
 
                 tween.execute(4000).then(() => {
+                    next(() => enemies.length == 0);
                     for (let i = 0; i < spawnedEnemies.length; i++) {
-                        next(() => enemies.length == 0);
                         spawnedEnemies[i].useAI = 1;
                     }
                 });
@@ -78,7 +82,6 @@ export let stages = [
                         hp: 2,
                         width: .025,
                         height: .025,
-                        update: false,
                     }));
 
                     let e = spawnedEnemies[k - 1];
@@ -92,8 +95,8 @@ export let stages = [
                 }
 
                 tween.execute(4000).then(() => {
+                    next(() => enemies.length == 0);
                     for (let i = 0; i < spawnedEnemies.length; i++) {
-                        next(() => enemies.length == 0);
                         spawnedEnemies[i].useAI = 1;
                     }
                 });
@@ -108,7 +111,6 @@ export let stages = [
                         hp: 10,
                         width: .025,
                         height: .025,
-                        update: false,
                     }));
 
                     let e = spawnedEnemies[k - 1];
@@ -128,7 +130,6 @@ export let stages = [
                         hp: 2,
                         width: .025,
                         height: .025,
-                        update: false,
                     }));
 
                     let e = spawnedEnemies[k - 1];
@@ -148,7 +149,6 @@ export let stages = [
                         hp: 2,
                         width: .025,
                         height: .025,
-                        update: false,
                     }));
 
                     let e = spawnedEnemies[k - 1];
@@ -162,8 +162,8 @@ export let stages = [
                 }
 
                 tween.execute(4000).then(() => {
+                    next(() => enemies.length == 0);
                     for (let i = 0; i < spawnedEnemies.length; i++) {
-                        next(() => enemies.length == 0);
                         spawnedEnemies[i].useAI = 1;
                     }
                 });
@@ -171,5 +171,3 @@ export let stages = [
         ],
     }
 ]
-
-//function 

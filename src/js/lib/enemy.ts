@@ -71,13 +71,13 @@ export class Enemy extends Box2D {
         this.hp = params.hp || 5;
         this.maxHp = params.maxHp || this.hp;
 
-        this.ai = params.ai || new AIBehavior(this, params);
-        this.useAI = params.update || 0;
+        this.ai = params.ai || new AIBehavior(params);
+        this.useAI = 0;
     }
 
     public update(): void {
         if (this.useAI == 1) {
-            this.ai.update();
+            this.ai.update(this);
         }
     }
 
