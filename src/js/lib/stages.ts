@@ -7,9 +7,66 @@ import { Enemy } from "./enemy"
 import Stage from "./stage"
 
 export let stages = [
+    /*
+
+    Stage 1: "Unexpected Adventure"
+
+    ===============================
+    
+    
+
+    */
+
     {
         name: "Stage 1",
         title: "Unexpected Adventure",
+        rounds: [
+            (next: any) => {
+                let spawnedEnemies: Enemy[] = [];
+
+                for (let i = 0; i < 6; i++) {
+                    let k = spawnedEnemies.push(enemies.add({
+                        x: .75 - (i % 2 - 0.5) * .1,
+                        y: -.1 - Math.floor(i / 2) * .02 / 3,
+                        hp: 2,
+                        width: .025,
+                        height: .025,
+                        update: false,
+                    }));
+
+                    let e = spawnedEnemies[k - 1];
+
+                    tween.from(e).to({
+                        y: .3 - Math.floor(i / 2) * .2 / 3,
+                    }).execute(500, {
+                        delay: i * 500,
+                        tweening: TWEENING.BEZIER,
+                    });
+                }
+
+                tween.execute(4000).then(() => {
+                    for (let i = 0; i < spawnedEnemies.length; i++) {
+                        next(() => enemies.length == 0);
+                        spawnedEnemies[i].useAI = 1;
+                    }
+                });
+            }
+        ],
+    },
+
+    /*
+
+    Stage N
+
+    ======
+    
+    
+
+    */
+
+    {
+        name: "Stage N",
+        title: "Bullet March",
         rounds: [
             (next: any) => {
                 let spawnedEnemies: Enemy[] = [];
@@ -115,3 +172,4 @@ export let stages = [
     }
 ]
 
+//function 

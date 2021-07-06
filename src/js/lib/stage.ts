@@ -1,6 +1,6 @@
 
 import { width, height, ctx, tween } from "../app";
-import { enemies } from "../game";
+import { enemies, particles } from "../game";
 import { TWEENING } from "./tween"
 import { Enemy } from "./enemy"
 
@@ -28,7 +28,7 @@ export default class Stage {
     };
 
     constructor() {
-        this.startLevelAnimation();
+        this.executeLevel();
     }
 
     public update() {
@@ -64,8 +64,14 @@ export default class Stage {
     }
 
     private startLevelAnimation() {
-        this.description.showing = true;
         this.gameState = 0;
+
+        this.description = {
+            showing: true,
+            letters: 0,
+            letters2: 0,
+            shift: 0,
+        };
 
         // Animation 1: Appear "Stage 1" Text
         tween.from(this.description).to({
@@ -133,7 +139,7 @@ export default class Stage {
         }
         
         this.level ++;
-        this.executeLevel();
+        this.startLevelAnimation();
     }
 
     private nextRound() {
@@ -146,23 +152,13 @@ export default class Stage {
         this.executeRound();
     }
 
-    public get inFight () {
-        return this.gameState == 2
-    }
-
     /*
 
-    ** GAMEPLAY STUFF **
+    Are we mid a fight?
 
     */
 
-    private spawn(type: string, params?: any) {
-        switch (type) {
-            case "mob_group_1": MobGroup1(params || {}); break;
-        }
+    public get inFight () {
+        return this.gameState == 2
     }
-}
-
-function MobGroup1(params: any) {
-
 }
