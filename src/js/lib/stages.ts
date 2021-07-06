@@ -68,7 +68,7 @@ export let stages = [
 
     */
 
-    {
+    /*{
         name: "Stage N",
         title: "Bullet March",
         rounds: [
@@ -169,5 +169,5 @@ export let stages = [
                 });
             }
         ],
-    }
+    }*/
 ]

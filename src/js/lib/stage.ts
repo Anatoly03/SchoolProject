@@ -1,5 +1,5 @@
 
-import { width, height, ctx, tween } from "../app";
+import { width, height, ctx, tween, game } from "../app";
 import { enemies, particles } from "../game";
 import { TWEENING } from "./tween"
 import { Enemy } from "./enemy"
@@ -20,8 +20,8 @@ export default class Stage {
     private gameState = 0;
     private nextRoundCondition = () => false;
 
-    private description = {
-        showing: false,
+    private description: any = {
+        type: 0,
         letters: 0,
         letters2: 0,
         shift: 0,
@@ -29,6 +29,7 @@ export default class Stage {
 
     constructor() {
         this.executeLevel();
+        //this.playFinishAnimation();
     }
 
     public update() {
@@ -43,7 +44,7 @@ export default class Stage {
     }
 
     public render() {
-        if (this.description.showing) {
+        if (this.description.type == 1) {
             let size = Math.floor(.05 * height);
 
             ctx.textAlign = "left";
@@ -60,14 +61,34 @@ export default class Stage {
 
             ctx.fillStyle = `rgb(255, 255, 255, ${.9 - this.description.shift})`;
             ctx.fillRect((width - k.width) * .5, height * .6 + size * .3, k.width * this.description.letters, 5);
+        } else if (this.description.type == 2) {
+            ctx.fillStyle = `rgb(255, 255, 255, ${this.description.alpha})`;
+            ctx.fillRect(0, 0, width, height);
+
+            ctx.strokeStyle = `black`;
+            let total = Math.min(Math.floor(.9 / this.description.alpha), 10000);
+            for (let i = 0; i < total; i++) {
+                let rX = Math.random() * width;
+                let y = Math.random() * height;
+                let length = Math.random() * .1 * total * height;    
+
+                ctx.beginPath();
+                ctx.moveTo(rX, y);
+                ctx.lineTo(rX, y + length);
+                ctx.stroke();
+            }
         }
     }
 
-    private startLevelAnimation() {
-        this.gameState = 0;
+    /*
 
+    aNiMaTiOnS
+
+    */
+
+    private startLevelAnimation() {
         this.description = {
-            showing: true,
+            type: 1,
             letters: 0,
             letters2: 0,
             shift: 0,
@@ -81,7 +102,7 @@ export default class Stage {
             letters: 1,
         }).execute(2000)
 
-            // Animation 2: Appear "Unexpedt Adventure" Title
+            // Animation 2: Appear e.g. "Unexpected Adventure" Title
             .next(1500, {
                 delay: 1000,
             }).to({
@@ -98,6 +119,27 @@ export default class Stage {
             // Start Level
             .then(() => {
                 this.executeRound();
+            })
+    }
+
+    private playFinishAnimation() {
+        game.isTakingDamage = false;
+        this.gameState = 2;
+
+        this.description = {
+            type: 2,
+            alpha: 0,
+        };
+
+        // Animation 1: Whiten out screen
+        tween.from(this.description).to({
+            alpha: 1,
+        }).execute(5000, {
+            tweening: TWEENING.BEZIER,
+        })
+
+            .then(() => {
+                //
             })
     }
 
@@ -123,7 +165,7 @@ export default class Stage {
         }
 
         let round = stages[this.level].rounds[this.round];
-        
+
         this.gameState = 1;
 
         round(next);
@@ -137,7 +179,9 @@ export default class Stage {
 
     private nextLevel() {
         if (this.level + 1 >= stages.length) {
-            // Finished with the game
+            //setTimeout(() => {
+            this.playFinishAnimation();
+            //}, 1000)
             return;
         }
 

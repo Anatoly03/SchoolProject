@@ -18,6 +18,7 @@ export class AIBehavior {
             this.data = {
                 canShoot: true,
                 shootCooldown: 300,
+                timestamp: Date.now(),
             }
 
             this.loop = (parent, ai) => {
@@ -29,8 +30,8 @@ export class AIBehavior {
                         x: parent.x,
                         y: parent.y,
                         sender: 'ENEMY',
-                        amount: 12,
-                        offsetCircle: 1 / 12,
+                        amount: 6,
+                        offsetCircle: (Date.now() - ai.data.timestamp) / 24000,
                     });
                 }
             }

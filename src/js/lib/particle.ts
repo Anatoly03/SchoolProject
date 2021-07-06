@@ -67,7 +67,9 @@ export default class ParticleManager {
 
     public spawnParticleMass(params: any) {
         let k = params.amount || 45;
-        let j = params.offsetCircle || 0;
+        if (k == 0) return;
+
+        let j = params.offsetCircle || 1 / k;
 
         for (let i = 0; i < k; i++) {
             this.emit({
