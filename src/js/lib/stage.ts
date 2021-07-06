@@ -1,8 +1,7 @@
 
 import { width, height, ctx, tween, game } from "../app";
-import { enemies, particles } from "../game";
+import { particles } from "../game";
 import { TWEENING } from "./tween"
-import { Enemy } from "./enemy"
 
 import { stages } from "./stages"
 
@@ -62,21 +61,28 @@ export default class Stage {
             ctx.fillStyle = `rgb(255, 255, 255, ${.9 - this.description.shift})`;
             ctx.fillRect((width - k.width) * .5, height * .6 + size * .3, k.width * this.description.letters, 5);
         } else if (this.description.type == 2) {
-            ctx.fillStyle = `rgb(255, 255, 255, ${this.description.alpha})`;
+            ctx.fillStyle = `rgb(255, 255, 255, ${this.description.alpha || 0})`;
             ctx.fillRect(0, 0, width, height);
 
             ctx.strokeStyle = `black`;
-            let total = Math.min(Math.floor(.9 / this.description.alpha), 10000);
+            let total = Math.min(Math.floor(.9 / this.description.alpha), 500);
             for (let i = 0; i < total; i++) {
                 let rX = Math.random() * width;
                 let y = Math.random() * height;
-                let length = Math.random() * .1 * total * height;    
+                let length = Math.random() * .1 * total * height;
 
                 ctx.beginPath();
                 ctx.moveTo(rX, y);
                 ctx.lineTo(rX, y + length);
                 ctx.stroke();
             }
+
+            let size = Math.floor(.3 * height);
+
+            ctx.textAlign = "center";
+            ctx.fillStyle = `rgb(0, 0, 0, ${this.description.text1})`;
+            ctx.font = size + "px Yomogi";
+            ctx.fillText("Victory!", width * .5, height * .3);
         }
     }
 
@@ -129,6 +135,7 @@ export default class Stage {
         this.description = {
             type: 2,
             alpha: 0,
+            text1: 0,
         };
 
         // Animation 1: Whiten out screen
@@ -138,8 +145,14 @@ export default class Stage {
             tweening: TWEENING.BEZIER,
         })
 
-            .then(() => {
-                //
+            // Animation 2: Appear "Victory" Text
+            .next(1000, {
+                delay: 500,
+                tweening: TWEENING.BEZIER,
+            }).to({
+                text1: 1,
+            }).then(() => {
+                game.setState(1);
             })
     }
 

@@ -94,4 +94,8 @@ export class Game {
             })
         }
     }
+
+    public setState(arg: number) {
+        state = arg;
+    }
 }
