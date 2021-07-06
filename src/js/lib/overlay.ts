@@ -30,7 +30,7 @@ export default class Overlay {
             }
 
             // Energy
-            if (hero.energy > 0) {
+            /*if (hero.energy > 0) {
                 ctx.fillStyle = "rgb(0, 0, 50)";
                 ctx.fillRect(
                     0,
@@ -38,9 +38,10 @@ export default class Overlay {
                     30,
                     height * .5 * hero.energy / hero.maxEnergy,
                 );
-            }
+            }*/
 
             // Boss
+            /*
             let bossHp = 1;
             let totalBossHp = 1;
 
@@ -57,16 +58,8 @@ export default class Overlay {
                     30,
                     height * .5 * hero.energy / hero.maxEnergy,
                 );
-            }
+            }*/
 
-            //console.log(this.tweenTest);
-            /*ctx.strokeStyle = `rgb(${Math.floor(this.tweenTest.a)}, 0, 0)`;
-            ctx.strokeRect(
-                50,
-                50,
-                width - 100,
-                height - 100,
-            );*/
             this.overlayDamaged.render(0, 0, 1, 1);
         } else {
             let size = Math.floor(.2 * height);
