@@ -2,8 +2,8 @@
 import { width, height, ctx, game } from "../app";
 import { particles } from "../game";
 
-import ParticleManager from "./particle";
 import Box2D from "./box2d";
+import { AIBehavior } from "./ai";
 
 export default class EnemyManager {
     public enemies: Enemy[];
@@ -61,14 +61,8 @@ export class Enemy extends Box2D {
     public hp: number;
     public maxHp: number;
 
-    public canShoot: boolean;
-    public shootCooldown: number;
-    public updateEnemy;
-
-    // Change this to AI
-    public originalX: number;
-    //public originalY: number;
-    //public timeStart: any;
+    public ai: AIBehavior;
+    public useAI: number;
 
     constructor(params: any) {
         params.type = "ENEMY";
@@ -76,31 +70,14 @@ export class Enemy extends Box2D {
 
         this.hp = params.hp || 5;
         this.maxHp = params.maxHp || this.hp;
-        this.canShoot = true;
-        this.shootCooldown = 300; // 150;
-        this.updateEnemy = params.update == undefined ? true : params.update;
 
-        this.originalX = params.x;
-        //this.originalY = params.y;
-        //this.timeStart = Date.now();
+        this.ai = params.ai || new AIBehavior(this, params);
+        this.useAI = params.update || 0;
     }
 
     public update(): void {
-        if (this.updateEnemy) {
-            //this.x = this.originalX + Math.sin(Date.now() * .005) * .08 + Math.cos(Date.now() * .005 * Math.PI) * .03;
-
-            if (this.canShoot && this.shootCooldown != 0 && particles.updateEnemyParticles) {
-                this.canShoot = false;
-                setTimeout(() => this.canShoot = true, this.shootCooldown);
-                //this.shoot();
-
-                particles.spawnParticleMass({
-                    x: this.x,
-                    y: this.y,
-                    sender: 'ENEMY',
-                    amount: 12,
-                });
-            }
+        if (this.useAI == 1) {
+            this.ai.update();
         }
     }
 
@@ -112,20 +89,6 @@ export class Enemy extends Box2D {
             width * this.w,
             height * this.h
         );
-    }
-
-    // Enemy Methods
-
-    public shoot(): void {
-        particles.emit({
-            x: this.x,
-            y: this.y,
-            ySpeed: .01,
-            xSpeed: - (this.x - .5) * .02,
-            width: .01,
-            height: .01,
-            sender: "ENEMY",
-        })
     }
 
     public collide(obj: Box2D) {

@@ -1,20 +1,10 @@
 
-import { width, height, ctx, keys, game, tween } from "../app";
+import { width, height, ctx, tween } from "../app";
 import { enemies } from "../game";
 import { TWEENING } from "./tween"
 import { Enemy } from "./enemy"
 
-let stages = [
-    {
-        name: "Stage 1",
-        title: "Unexpected Adventure",
-        rounds: [
-            () => {
-                //
-            },
-        ],
-    }
-]
+import { stages } from "./stages"
 
 export default class Stage {
     private level = 0;
@@ -28,6 +18,7 @@ export default class Stage {
 
     */
     private gameState = 0;
+    private nextRoundCondition = () => false;
 
     private description = {
         showing: false,
@@ -43,6 +34,11 @@ export default class Stage {
     public update() {
         if (this.gameState == 1) {
             //
+        }
+
+        if (this.nextRoundCondition()) {
+            this.nextRoundCondition = () => false;
+            this.nextRound();
         }
     }
 
@@ -92,96 +88,43 @@ export default class Stage {
 
             // Start Level
             .then(() => {
-                this.executeLevel();
+                this.executeRound();
             })
     }
 
+    /*
+
+    Execute Level or Round
+
+    */
+
     private executeLevel() {
-        let round = stages[this.level].rounds[this.round];
         this.gameState = 1;
 
-        let spawnedEnemies: Enemy[] = [];
-
-        for (let i = 0; i < 6; i++) {
-            let k = spawnedEnemies.push(enemies.add({
-                x: .75 + i%2 * .1,
-                y: -.1 - i/6 * .2,
-                hp: 10,
-                width: .025,
-                height: .025,
-                update: false,
-            }));
-
-            let e = spawnedEnemies[k - 1];
-
-            tween.from(e).to({
-                y: .3 - i/6 * .2,
-            }).execute(500, {
-                delay: i * 500,
-                tweening: TWEENING.BEZIER,
-            });
-        }
-
-        for (let i = 0; i < 6; i++) {
-            let k = spawnedEnemies.push(enemies.add({
-                x: .25 - i%2 * .1,
-                y: -.1 - i/6 * .2,
-                hp: 2,
-                width: .025,
-                height: .025,
-                update: false,
-            }));
-
-            let e = spawnedEnemies[k - 1];
-
-            tween.from(e).to({
-                y: .3 - i/6 * .2,
-            }).execute(500, {
-                delay: i * 500,
-                tweening: TWEENING.BEZIER,
-            });
-        }
-
-        for (let i = 0; i < 6; i++) {
-            let k = spawnedEnemies.push(enemies.add({
-                x: .5 - (i%2 - 0.5) * .1,
-                y: -.1 - Math.floor(i/2) * .02 / 3,
-                hp: 2,
-                width: .025,
-                height: .025,
-                update: false,
-            }));
-
-            let e = spawnedEnemies[k - 1];
-
-            tween.from(e).to({
-                y: .3 - Math.floor(i/2) * .2 / 3,
-            }).execute(500, {
-                delay: i * 500,
-                tweening: TWEENING.BEZIER,
-            });
-        }
-
-        tween.execute(4000).then(() => {
-            for (let i = 0; i < spawnedEnemies.length; i++) {
-                this.gameState = 2;
-                spawnedEnemies[i].updateEnemy = true;
-            }
-        })
+        //let level = stages[this.level];
+        this.round = 0;
+        this.startLevelAnimation();
     }
 
-    private nextRound() {
-        if (this.round + 1 >= stages[this.level].rounds.length) {
-            // Next Level instead
-            return;
-        }
+    private executeRound() {
+        let that = this;
 
-        this.round ++;
+        function next(condition: () => boolean) {
+            that.gameState = 2;
+            that.nextRoundCondition = condition;
+        }
 
         let round = stages[this.level].rounds[this.round];
         this.gameState = 1;
 
+        round(next);
     }
+
+    /*
+
+    Increment Level or Round
+
+    */
 
     private nextLevel() {
         if (this.level + 1 >= stages.length) {
@@ -190,10 +133,17 @@ export default class Stage {
         }
         
         this.level ++;
-        this.round = 0;
+        this.executeLevel();
+    }
 
-        let level = stages[this.level];
+    private nextRound() {
+        if (this.round + 1 >= stages[this.level].rounds.length) {
+            this.nextLevel();
+            return;
+        }
 
+        this.round ++;
+        this.executeRound();
     }
 
     public get inFight () {

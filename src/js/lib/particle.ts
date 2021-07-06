@@ -75,7 +75,7 @@ export default class ParticleManager {
                 y: params.y || .5,
                 width: params.width || 0.01,
                 sender: params.sender || 'ENEMY',
-                xSpeed: Math.sin(2 * i * Math.PI / k) * .005,
+                xSpeed: Math.sin(2 * i * Math.PI / k + j * Math.PI) * .005,
                 ySpeed: Math.cos(2 * i * Math.PI / k + j * Math.PI) * .005,
             });
         }

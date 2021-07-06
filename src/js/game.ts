@@ -32,8 +32,8 @@ export class Game {
 
         if (state == 0) {
             hero.update();
-            enemies.update();
             particles.update();
+            enemies.update();
         } else {
             if (keys["enter"]) {
                 this.startGame();
@@ -41,6 +41,7 @@ export class Game {
         }
 
         overlay.update();
+        this.stage.update();
 
         if (hero.hp <= 0) {
             state = 1;
@@ -54,8 +55,8 @@ export class Game {
 
         if (state == 0) {
             hero.render();
-            enemies.render();
             particles.render();
+            enemies.render();
         }
         overlay.render();
         this.stage.render();
