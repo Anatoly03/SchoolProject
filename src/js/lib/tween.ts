@@ -29,12 +29,12 @@ export class Tween {
     TWEEN TYPE: (start, end, percentage)
 */
 
-type TweeningType = (start: number, end: number, percentage: number) => number;
+type TweeningType = (percentage: number) => number;
 
 export let TWEENING: { [key: string]: TweeningType} = {
-    LINEAR: (s, e, p) => s + (e - s) * p,
-    EASE_IN: (s, e, p) => s + (e - s) * p * p,
-    BEZIER: (s, e, p) => s + (e - s) * p * p * (3 - 2 * p),
+    LINEAR: (p) => p,
+    EASE_IN: (p) => p * p,
+    BEZIER: (p) => p * p * (3 - 2 * p),
 }
 
 class TweenObject {
@@ -78,7 +78,7 @@ class TweenObject {
     
                     if (typeof start == "number") {
                         let percentage = 1 - (this.finishOn - Date.now()) / this.ms;
-                        this.data[p] = this.tweening(start, end, percentage);
+                        this.data[p] = start + this.tweening(percentage) * (end - start);
                     }
                 }
             }
