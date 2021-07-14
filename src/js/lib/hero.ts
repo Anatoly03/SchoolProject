@@ -22,8 +22,8 @@ export default class Hero extends Box2D {
             ySpeed: .005,
             width: .1,
             height: .1,
-            xHitbox: .01,
-            yHitbox: .01,
+            xHitbox: .005,
+            yHitbox: .005,
         });
 
         this.canShoot = true;

@@ -8,20 +8,25 @@ export class AIBehavior {
     public shootCooldown: number;
 
     public data: any;
-    public loop = (arg0: Enemy, arg1: AIBehavior) => {};
+    public loop: any //(arg0: Enemy, arg1: AIBehavior) => void | ((arg0: Enemy, arg1: AIBehavior) => void)[]
+        = (arg0: Enemy, arg1: AIBehavior) => { };
+    public loopLevel = 0;
+    public loopIncrementCondition = () => false;
 
     constructor(params?: any) {
         this.canShoot = true;
         this.shootCooldown = 300; // 150;
 
         if (params) {
-            this.data = {
+            this.data = params.data
+            /*{
                 canShoot: true,
                 shootCooldown: 300,
                 timestamp: Date.now(),
-            }
+            }*/
 
-            this.loop = (parent, ai) => {
+            this.loop = params.loop;
+            /*(parent: Enemy, ai: AIBehavior) => {
                 if (ai.data.canShoot && particles.updateEnemyParticles) {
                     ai.data.canShoot = false;
                     setTimeout(() => ai.data.canShoot = true, ai.data.shootCooldown);
@@ -34,15 +39,31 @@ export class AIBehavior {
                         offsetCircle: (Date.now() - ai.data.timestamp) / 24000,
                     });
                 }
-            }
+            }*/
         } else {
             this.data = {}
-            this.loop = (parent, ai) => {}
+            this.loop = (parent: Enemy, ai: AIBehavior) => { }
         }
     }
 
     public update(parent: Enemy): void {
-        this.loop(parent, this);
+        if (typeof this.loop == "function") {
+            this.loop(parent, this);
+        } else if (typeof this.loop == "object") {
+            let that = this;
+
+            function next(condition: () => boolean) {
+                this.loopIncrementCondition = condition;
+            }
+
+            this.loop[this.loopLevel](parent, this, next);
+
+            if (this.loopIncrementCondition()) {
+                this.loopIncrementCondition = () => false;
+                this.loopLevel++;
+                if (this.loopLevel >= this.loop.length) this.loopLevel = 0;
+            }
+        }
 
         /*if (this.canShoot && this.shootCooldown != 0 && particles.updateEnemyParticles) {
             this.canShoot = false;
