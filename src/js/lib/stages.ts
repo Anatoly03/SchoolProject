@@ -196,7 +196,7 @@ export let stages = [
                                                 particles.spawnParticleMass({
                                                     x: parent.x,
                                                     y: parent.y,
-                                                    amount: 3,
+                                                    amount: 6,
                                                     speedMultiplier: 0.7,
                                                 });
                                             }
@@ -230,7 +230,7 @@ export let stages = [
 
 
 
-            (next: any) => {
+            /*(next: any) => {
                 let spawnedEnemies: Enemy[] = [];
 
                 for (let i = 0; i < 6; i++) {
@@ -296,7 +296,7 @@ export let stages = [
                         spawnedEnemies[i].useAI = 1;
                     }
                 });
-            }
+            }*/
         ],
     }
 ]
