@@ -25,12 +25,12 @@ export let stages = [
 
             /*
 
-                ### Round 1 ###
+                ### Stage 1 Round 1 ###
     
                 Several enemies spawn on the top right.
 
                 They automatically shoot nearby the player not hitting him.
-                The objective of the first round is not to move.
+                The objective of the first round is not to move and just shoot.
 
             */
 
@@ -56,7 +56,7 @@ export let stages = [
                                 posState: 1,
                             },
                             loop:
-                                (parent: Enemy, ai: AIBehavior, next: () => void) => {
+                                (parent: Enemy, ai: AIBehavior, next_loop: () => void) => {
                                     if (ai.data.canShoot) {
                                         ai.data.canShoot = false;
                                         ai.data.currentBust--;
@@ -140,7 +140,7 @@ export let stages = [
 
     /*
 
-    Stage N
+    Stage 2: "Bullet March"
 
     ======
     
@@ -149,38 +149,87 @@ export let stages = [
     */
 
     {
-        name: "Stage N",
+        name: "Stage 2",
         title: "Bullet March",
         rounds: [
+
+            /*
+
+                ### Stage 2 Round 1 ###
+    
+                Enemies move in circle
+
+            */
+
             (next: any) => {
                 let spawnedEnemies: Enemy[] = [];
 
-                for (let i = 0; i < 6; i++) {
+                for (let i = 0; i < 20; i++) {
                     let k = spawnedEnemies.push(enemies.add({
-                        x: .5 - (i % 2 - 0.5) * .1,
-                        y: -.1 - Math.floor(i / 2) * .02 / 3,
+                        x: .5 - Math.sin(2 * i * Math.PI / 20),
+                        y: .5 - Math.cos(2 * i * Math.PI / 20),
                         hp: 2,
                         width: .025,
                         height: .025,
+
+                        ai: new AIBehavior({
+                            data: {
+                                phiVel: 0,
+                                phiPos: 0,
+                                cooldown: i * 100,
+                                currentCooldown: i * 100,
+                                canShoot: true,
+                            },
+                            loop:
+                                (parent: Enemy, ai: AIBehavior, next_loop: () => void) => {
+                                    parent.x = .5 - Math.sin(2 * i * Math.PI / 20 + Math.PI * ai.data.phiPos) * .3;
+                                    parent.y = .5 - Math.cos(2 * i * Math.PI / 20 + Math.PI * ai.data.phiPos) * .3;
+
+                                    ai.data.phiPos += ai.data.phiVel
+                                    if (ai.data.phiVel < .01)
+                                        ai.data.phiVel += .0001;
+
+                                    if (ai.data.canShoot) {
+                                        ai.data.canShoot = false;
+                                        setTimeout(() => {
+                                            if (ai.data.currentCooldown == 2000) {
+                                                particles.spawnParticleMass({
+                                                    x: parent.x,
+                                                    y: parent.y,
+                                                    amount: 3,
+                                                    speedMultiplier: 0.7,
+                                                });
+                                            }
+                                            ai.data.currentCooldown = 2000;
+                                            ai.data.canShoot = true;
+                                        }, ai.data.currentCooldown)
+                                    }
+                                }
+                        })
                     }));
 
                     let e = spawnedEnemies[k - 1];
 
                     tween.from(e).to({
-                        y: .3 - Math.floor(i / 2) * .2 / 3,
-                    }).execute(500, {
-                        delay: i * 500,
+                        x: .5 - Math.sin(2 * i * Math.PI / 20) * .3,
+                        y: .5 - Math.cos(2 * i * Math.PI / 20) * .3,
+                    }).execute(2000, {
                         tweening: TWEENING.BEZIER,
                     });
                 }
 
-                tween.execute(4000).then(() => {
+                tween.execute(3000).then(() => {
                     next(() => enemies.length == 0);
                     for (let i = 0; i < spawnedEnemies.length; i++) {
                         spawnedEnemies[i].useAI = 1;
                     }
                 });
             },
+
+
+
+
+
             (next: any) => {
                 let spawnedEnemies: Enemy[] = [];
 
