@@ -6,7 +6,7 @@ import { TWEENING } from "./tween"
 import { stages } from "./stages"
 
 export default class Stage {
-    private level = 1; // ZERO IS DEFAULT
+    private level = 0; // ZERO IS DEFAULT
     private round = 0; // ZERO IS DEFAULT
 
     /*
